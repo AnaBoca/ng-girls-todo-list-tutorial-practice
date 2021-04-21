@@ -9,10 +9,18 @@ import { TodoItem } from '../interfaces/todo-item';
 export class TodoItemComponent implements OnInit {
   @Input() item: TodoItem;
   @Output() remove: EventEmitter<TodoItem> = new EventEmitter<TodoItem>();
+  @Output() update: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  completeItem(): void {
+    this.update.emit({
+      item: this.item,
+      changes: {completed: !this.item.completed}
+    });
   }
 
   removeItem(): void {
