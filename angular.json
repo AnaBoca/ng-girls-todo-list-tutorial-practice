@@ -42,6 +42,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "baseHref": "https://anaboca.github.io/ng-girls-todo-list-tutorial-practice/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
