@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-input-button-unit',
@@ -6,8 +7,13 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./input-button-unit.component.scss']
 })
 export class InputButtonUnitComponent implements OnInit {
-  title = 'Hello World';
-  @Output() submit: EventEmitter<string> = new EventEmitter<string>();
+  title = '';
+
+  @Output()
+  submit: EventEmitter<string> = new EventEmitter<string>();
+
+  @ViewChild('inputElementRef', { static: true })
+  inputNgModel: NgModel;
 
   constructor() {
   }
@@ -15,7 +21,12 @@ export class InputButtonUnitComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  submitValue(newTitle: string): void {
-    this.submit.emit(newTitle);
+  submitValue(): void {
+    this.inputNgModel.control.markAsDirty();
+
+    if (this.inputNgModel.valid) {
+      this.submit.emit(this.title);
+      this.inputNgModel.reset();
+    }
   }
 }

@@ -1,7 +1,8 @@
 <input
   class="todo-input"
-  #inputElementRef
-  [value]="title"
-  (keyup.enter)="submitValue($event.target.value)"
+  #inputElementRef="ngModel"
+  [(ngModel)]="title"
+  (keyup.enter)="submitValue()"
+  required
 />
-<button class="btn" (click)="submitValue(inputElementRef.value)">Save</button>
+<button class="btn" (click)="submitValue()">Save</button>
