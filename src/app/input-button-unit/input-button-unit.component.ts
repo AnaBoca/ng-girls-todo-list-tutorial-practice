@@ -7,7 +7,7 @@ import { NgModel } from '@angular/forms';
     <input
       class="todo-input"
       #inputElementRef="ngModel"
-      [(ngModel)]="title"
+      [(ngModel)]="listItemValue"
       (keyup.enter)="submitValue()"
       required
     />
@@ -16,7 +16,7 @@ import { NgModel } from '@angular/forms';
   styleUrls: ['./input-button-unit.component.scss']
 })
 export class InputButtonUnitComponent implements OnInit {
-  title = '';
+  listItemValue = '';
 
   @Output()
   submit: EventEmitter<string> = new EventEmitter<string>();
@@ -34,7 +34,7 @@ export class InputButtonUnitComponent implements OnInit {
     this.inputNgModel.control.markAsDirty();
 
     if (this.inputNgModel.valid) {
-      this.submit.emit(this.title);
+      this.submit.emit(this.listItemValue);
       this.inputNgModel.reset();
     }
   }
