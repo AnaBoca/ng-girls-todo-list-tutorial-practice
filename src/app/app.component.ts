@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 
     <app-list-manager></app-list-manager>
   `,
-  styleUrls: ['./app.component.scss']
+  styles: ['h1 {color: #fff;']
 })
 export class AppComponent {
   title = 'To-Do List';
