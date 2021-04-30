@@ -3,7 +3,16 @@ import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-input-button-unit',
-  templateUrl: './input-button-unit.component.html',
+  template: `
+    <input
+      class="todo-input"
+      #inputElementRef="ngModel"
+      [(ngModel)]="title"
+      (keyup.enter)="submitValue()"
+      required
+    />
+    <button class="btn" (click)="submitValue()">Save</button>
+  `,
   styleUrls: ['./input-button-unit.component.scss']
 })
 export class InputButtonUnitComponent implements OnInit {
