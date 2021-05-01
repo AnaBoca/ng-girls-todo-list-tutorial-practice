@@ -12,5 +12,5 @@ import { Component } from '@angular/core';
   styles: ['h1 { color: #fff; }']
 })
 export class AppComponent {
-  title = 'To-Do List';
+  title = 'To-Do';
 }
