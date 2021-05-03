@@ -43,7 +43,6 @@ export class ListManagerComponent implements OnInit {
   }
 
   updateItem(id:number, changes: ItemWithChanges): void {
-    console.log('updateItemService');
     this.todoListService.updateItem(id, changes);
   }
 

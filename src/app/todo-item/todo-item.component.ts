@@ -44,7 +44,6 @@ export class TodoItemComponent implements OnInit {
   @Output()
   remove: EventEmitter<TodoItem> = new EventEmitter<TodoItem>();
 
-  // EDIT BUTTON
   @Output()
   update: EventEmitter<ItemWithChanges> = new EventEmitter<ItemWithChanges>();
 
@@ -54,7 +53,6 @@ export class TodoItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('anything');
   }
 
   removeItem(): void {
@@ -69,7 +67,6 @@ export class TodoItemComponent implements OnInit {
   // EDIT BUTTON
   updateTitle(event: KeyboardEvent) {
     const target = event.target as HTMLInputElement;
-    console.log('updateTitle', target.value);
     this.update.emit({
       item: this.item,
       changes: {title: target.value}
