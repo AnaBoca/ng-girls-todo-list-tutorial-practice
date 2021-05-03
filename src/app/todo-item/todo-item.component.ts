@@ -77,7 +77,6 @@ export class TodoItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('anything');
   }
 
   removeItem(): void {
@@ -90,7 +89,6 @@ export class TodoItemComponent implements OnInit {
 
   updateTitle(event: KeyboardEvent) {
     const target = event.target as HTMLInputElement;
-    console.log('updateTitle', target.value);
     this.update.emit({
       item: this.item,
       changes: {title: target.value}
