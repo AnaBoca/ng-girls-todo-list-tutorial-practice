@@ -11,11 +11,7 @@ import { createItem, TodoListService } from '../services/todo-list.service';
       <app-input-button-unit (submit)="addItem($event)"></app-input-button-unit>
 
       <ul>
-<<<<<<< HEAD
         <li *ngFor="let todoItem of todoList; trackBy: trackById; let first = first; let last = last">
-=======
-        <li *ngFor="let todoItem of todoList; trackBy: trackById">
->>>>>>> 0b4d954... edit method name
           <app-todo-item
             [item]="todoItem"
             [first]="first"
@@ -25,7 +21,6 @@ import { createItem, TodoListService } from '../services/todo-list.service';
             (move)="moveItem(todoItem.id, $event)"
           >
           </app-todo-item>
-        </li>
       </ul>
     </div>
   `,
@@ -36,14 +31,13 @@ export class ListManagerComponent implements OnInit {
 
   constructor(private todoListService: TodoListService) { }
 
-  trackById(index: number, item: TodoItem) {
-    return item.id;
-  }
-
   ngOnInit(): void {
     this.todoList = this.todoListService.getTodoList();
   }
 
+  trackById(index: number, item: TodoItem) {
+    return item.id;
+  }
   addItem(title: string): void {
     this.todoListService.addItem(createItem(title));
   }
