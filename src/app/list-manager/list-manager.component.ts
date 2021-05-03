@@ -10,7 +10,7 @@ import { createItem, TodoListService } from '../services/todo-list.service';
       <app-input-button-unit (submit)="addItem($event)"></app-input-button-unit>
 
       <ul>
-        <li *ngFor="let todoItem of todoList; trackBy: trackbyId">
+        <li *ngFor="let todoItem of todoList; trackBy: trackById">
           <app-todo-item
             [item]="todoItem"
             (remove)="removeItem(todoItem.id)"
@@ -26,7 +26,7 @@ export class ListManagerComponent implements OnInit {
 
   constructor(private todoListService: TodoListService) { }
 
-  trackbyId(index: number, item: TodoItem) {
+  trackById(index: number, item: TodoItem) {
     return item.id;
   }
 
