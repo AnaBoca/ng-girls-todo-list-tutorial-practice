@@ -9,7 +9,7 @@ import { TodoListService } from '../services/todo-list.service';
       <app-input-button-unit (submit)="addItem($event)"></app-input-button-unit>
 
       <ul>
-        <li *ngFor="let todoItem of todoList">
+        <li *ngFor="let todoItem of todoList; trackBy: trackById">
           <app-todo-item
             [item]="todoItem"
             (remove)="removeItem($event)"

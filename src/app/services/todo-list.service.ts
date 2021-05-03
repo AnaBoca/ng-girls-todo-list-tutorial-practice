@@ -4,13 +4,22 @@ import { StorageService } from './storage.service';
 
 const todoListStorageKey = 'Todo_List';
 
+let lastItemId = 1;
+
+export function createItem(title: string): TodoItem {
+  return {
+    id: lastItemId++,
+    title: title
+  }
+}
+
 const defaultTodoList: TodoItem[] = [
-  {title: 'install NodeJS'},
-  {title: 'install Angular CLI'},
-  {title: 'create new app'},
-  {title: 'serve app'},
-  {title: 'develop app'},
-  {title: 'deploy app'},
+  createItem('install NodeJS'),
+  createItem('install Angular CLI'),
+  createItem('create new app'),
+  createItem('serve app'),
+  createItem('develop app'),
+  createItem('deploy app')
 ];
 
 @Injectable({
