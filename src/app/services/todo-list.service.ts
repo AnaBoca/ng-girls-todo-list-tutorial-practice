@@ -50,11 +50,6 @@ export class TodoListService {
     const index = this.todoList.findIndex(element => element.id === id);
     const oldItem = this.todoList[index];
     this.todoList[index] = {...oldItem, ...changes};
-    // this.todoList = this.todoList.map(currentItem => {
-    //   return currentItem.id === id
-    //     ? { ...currentItem, ...changes }
-    //     : currentItem;
-    // });
     this.saveList();
   }
 
