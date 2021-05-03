@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ItemWithChanges } from '../interfaces/item-with-changes';
 import { TodoItem } from '../interfaces/todo-item';
-import { TodoListService } from '../services/todo-list.service';
+import { createItem, TodoListService } from '../services/todo-list.service';
 
 @Component({
   selector: 'app-list-manager',
@@ -9,11 +10,11 @@ import { TodoListService } from '../services/todo-list.service';
       <app-input-button-unit (submit)="addItem($event)"></app-input-button-unit>
 
       <ul>
-        <li *ngFor="let todoItem of todoList">
+        <li *ngFor="let todoItem of todoList; trackBy: trackbyId">
           <app-todo-item
             [item]="todoItem"
-            (remove)="removeItem($event)"
-            (update)="updateItem($event.item, $event.changes)"></app-todo-item>
+            (remove)="removeItem(todoItem.id)"
+            (update)="updateItem(todoItem.id, $event.changes)"></app-todo-item>
         </li>
       </ul>
     </div>
@@ -25,20 +26,25 @@ export class ListManagerComponent implements OnInit {
 
   constructor(private todoListService: TodoListService) { }
 
+  trackbyId(index: number, item: TodoItem) {
+    return item.id;
+  }
+
   ngOnInit(): void {
     this.todoList = this.todoListService.getTodoList();
   }
 
   addItem(title: string): void {
-    this.todoListService.addItem({ title });
+    this.todoListService.addItem(createItem(title));
   }
 
-  removeItem(item): void {
-    this.todoListService.deleteItem(item);
+  removeItem(id: number): void {
+    this.todoListService.deleteItem(id);
   }
 
-  updateItem(item, changes): void {
-    this.todoListService.updateItem(item, changes);
+  updateItem(id:number, changes: ItemWithChanges): void {
+    console.log('updateItemService');
+    this.todoListService.updateItem(id, changes);
   }
 
 }

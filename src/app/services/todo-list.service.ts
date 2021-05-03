@@ -1,16 +1,26 @@
 import { Injectable } from '@angular/core';
+import { ItemWithChanges } from '../interfaces/item-with-changes';
 import { TodoItem } from '../interfaces/todo-item';
 import { StorageService } from './storage.service';
 
 const todoListStorageKey = 'Todo_List';
 
+let lastItemId = 1;
+
+export function createItem(title: string): TodoItem {
+  return {
+    id: lastItemId++,
+    title: title
+  }
+}
+
 const defaultTodoList: TodoItem[] = [
-  {title: 'install NodeJS'},
-  {title: 'install Angular CLI'},
-  {title: 'create new app'},
-  {title: 'serve app'},
-  {title: 'develop app'},
-  {title: 'deploy app'},
+  createItem('install NodeJS'),
+  createItem('install Angular CLI'),
+  createItem('create new app'),
+  createItem('serve app'),
+  createItem('develop app'),
+  createItem('deploy app')
 ];
 
 @Injectable({
@@ -36,14 +46,22 @@ export class TodoListService {
     this.saveList();
   }
 
-  updateItem(item: TodoItem, changes): void {
-    const index = this.todoList.indexOf(item);
-    this.todoList[index] = {...item, ...changes};
+  updateItem(id:number, changes: ItemWithChanges): void {
+    const index = this.todoList.findIndex(element => element.id === id);
+    const oldItem = this.todoList[index];
+    this.todoList[index] = {...oldItem, ...changes};
+    // this.todoList = this.todoList.map(currentItem => {
+    //   return currentItem.id === id
+    //     ? { ...currentItem, ...changes }
+    //     : currentItem;
+    // });
     this.saveList();
   }
 
-  deleteItem(item: TodoItem): void {
-    const index = this.todoList.indexOf(item);
+  deleteItem(id: number): void {
+    const index = this.todoList.findIndex(element => {
+      return element.id === id;
+    })
     this.todoList.splice(index, 1);
     this.saveList();
   }
