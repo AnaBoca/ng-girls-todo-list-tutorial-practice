@@ -19,7 +19,7 @@ li {
 
 body {
   background: #00275d;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 22px;
   color: #404040;
   font-family: "Montserrat", sans-serif;
@@ -33,21 +33,30 @@ ul {
 .btn {
   background: #a99870;
   color: #fff;
-  padding: 3px 10px;
+  padding: 2px 8px;
   margin: 0 0 0 3px;
   border: none;
-  border-radius: 20px;
+  border-radius: 50px;
   font-size: 12px;
   line-height: 24px;
   cursor: pointer;
   vertical-align: bottom;
-  width: 5rem;
+  width: 4rem;
   font-family: "Montserrat", sans-serif;
   font-weight: bold;
+  height: 100%;
 }
 
 .btn:hover {
   background: lightslategrey;
+}
+
+.btn-green {
+  background: green;
+}
+
+.btn-green:hover {
+  background: darkgreen;
 }
 
 .btn-red {

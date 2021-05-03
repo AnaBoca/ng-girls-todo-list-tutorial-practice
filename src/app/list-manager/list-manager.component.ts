@@ -32,6 +32,10 @@ export class ListManagerComponent implements OnInit {
 
   constructor(private todoListService: TodoListService) { }
 
+  trackbyId(index: number, item: TodoItem) {
+    return item.id;
+  }
+
   ngOnInit(): void {
     this.todoList = this.todoListService.getTodoList();
   }
