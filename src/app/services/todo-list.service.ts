@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ItemWithChanges } from '../interfaces/item-with-changes';
 import { TodoItem } from '../interfaces/todo-item';
 import { StorageService } from './storage.service';
 
@@ -45,14 +46,17 @@ export class TodoListService {
     this.saveList();
   }
 
-  updateItem(item: TodoItem, changes): void {
-    const index = this.todoList.indexOf(item);
-    this.todoList[index] = {...item, ...changes};
+  updateItem(id: number, changes: ItemWithChanges): void {
+    const index = this.todoList.findIndex(element => element.id === id);
+    const oldItem = this.todoList[index];
+    this.todoList[index] = {...oldItem, ...changes};
     this.saveList();
   }
 
-  deleteItem(item: TodoItem): void {
-    const index = this.todoList.indexOf(item);
+  deleteItem(id: number): void {
+    const index = this.todoList.findIndex(element => {
+      return element.id === id;
+    })
     this.todoList.splice(index, 1);
     this.saveList();
   }

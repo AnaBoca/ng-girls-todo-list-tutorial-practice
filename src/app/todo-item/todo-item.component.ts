@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { ItemWithChanges } from '../interfaces/item-with-changes';
 import { TodoItem } from '../interfaces/todo-item';
 
 @Component({
@@ -27,7 +28,7 @@ export class TodoItemComponent implements OnInit {
   @Output()
   remove: EventEmitter<TodoItem> = new EventEmitter<TodoItem>();
   @Output()
-  update: EventEmitter<any> = new EventEmitter<any>();
+  update: EventEmitter<ItemWithChanges> = new EventEmitter<ItemWithChanges>();
 
   constructor() { }
 
