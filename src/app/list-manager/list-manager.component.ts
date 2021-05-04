@@ -38,6 +38,7 @@ export class ListManagerComponent implements OnInit {
   trackById(index: number, item: TodoItem) {
     return item.id;
   }
+
   addItem(title: string): void {
     this.todoListService.addItem(createItem(title));
   }
