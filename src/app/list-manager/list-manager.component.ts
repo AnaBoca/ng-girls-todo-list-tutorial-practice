@@ -26,12 +26,12 @@ export class ListManagerComponent implements OnInit {
 
   constructor(private todoListService: TodoListService) { }
 
-  trackById(index: number, item: TodoItem) {
-    return item.id;
-  }
-
   ngOnInit(): void {
     this.todoList = this.todoListService.getTodoList();
+  }
+
+  trackById(index: number, item: TodoItem) {
+    return item.id;
   }
 
   addItem(title: string): void {
