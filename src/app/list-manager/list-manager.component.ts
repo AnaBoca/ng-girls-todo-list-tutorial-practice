@@ -10,8 +10,10 @@ import { createItem, TodoListService } from '../services/todo-list.service';
     <div class="todo-app">
       <app-input-button-unit (submit)="addItem($event)"></app-input-button-unit>
 
+      <app-input-search-filter (search)="findItems($event)"></app-input-search-filter>
+
       <ul>
-        <li *ngFor="let todoItem of todoList; trackBy: trackById; let first = first; let last = last">
+        <li *ngFor="let todoItem of filteredTodoList; trackBy: trackById; let first = first; let last = last">
           <app-todo-item
             [item]="todoItem"
             [first]="first"
@@ -28,11 +30,14 @@ import { createItem, TodoListService } from '../services/todo-list.service';
 })
 export class ListManagerComponent implements OnInit {
   todoList: TodoItem[] = [];
+  filteredTodoList: TodoItem[] = [];
+  term: string;
 
   constructor(private todoListService: TodoListService) { }
 
   ngOnInit(): void {
     this.todoList = this.todoListService.getTodoList();
+    this.filteredTodoList = this.todoList;
   }
 
   trackById(index: number, item: TodoItem) {
@@ -45,10 +50,21 @@ export class ListManagerComponent implements OnInit {
 
   removeItem(id: number): void {
     this.todoListService.deleteItem(id);
+    this.applyFilter();
   }
 
   updateItem(id: number, changes: ItemWithChanges): void {
     this.todoListService.updateItem(id, changes);
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    this.filteredTodoList = this.todoList.filter(curItem => curItem.title.toLowerCase().includes(this.term.toLowerCase()));
+  }
+
+  findItems(term: string) {
+    this.term = term;
+    this.applyFilter();
   }
 
   moveItem(id: number, direction: Direction) {

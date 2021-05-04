@@ -1,4 +1,4 @@
-.todo-input {
+.search-input {
   padding: 4px 10px 4px;
   font-size: 16px;
   font-family: "Montserrat", sans-serif;
@@ -8,13 +8,9 @@
   flex-grow: 1;
 }
 
-:host(:not([hidden])) {
+:host {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 0.2rem;
   flex-grow: 1;
-  margin-bottom: 1rem;
-}
-
-input.ng-dirty.ng-invalid {
-  outline: red auto 1px !important;
 }

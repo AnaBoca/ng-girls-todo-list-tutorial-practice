@@ -7,13 +7,15 @@ import { TodoItemComponent } from './todo-item/todo-item.component';
 import { ListManagerComponent } from './list-manager/list-manager.component';
 import { TodoListService } from './services/todo-list.service';
 import { FormsModule } from '@angular/forms';
+import { InputSearchFilterComponent } from './input-search-filter/input-search-filter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InputButtonUnitComponent,
     TodoItemComponent,
-    ListManagerComponent
+    ListManagerComponent,
+    InputSearchFilterComponent
   ],
   imports: [
     BrowserModule,
