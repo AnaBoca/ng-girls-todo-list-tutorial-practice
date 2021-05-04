@@ -42,6 +42,7 @@ export class ListManagerComponent implements OnInit {
 
   addItem(title: string): void {
     this.todoListService.addItem(createItem(title));
+    this.applyFilter();
   }
 
   removeItem(id: number): void {
