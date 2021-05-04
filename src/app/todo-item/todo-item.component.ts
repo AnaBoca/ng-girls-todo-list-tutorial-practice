@@ -50,6 +50,4 @@ export class TodoItemComponent implements OnInit {
       changes: {completed: !this.item.completed}
     });
   }
-
-
 }
