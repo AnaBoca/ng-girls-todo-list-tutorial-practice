@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ItemWithChanges } from '../interfaces/item-with-changes';
 import { TodoItem } from '../interfaces/todo-item';
 import { createItem, TodoListService } from '../services/todo-list.service';
 
@@ -48,7 +49,7 @@ export class ListManagerComponent implements OnInit {
     this.applyFilter();
   }
 
-  updateItem(id, changes): void {
+  updateItem(id: number, changes: ItemWithChanges): void {
     this.todoListService.updateItem(id, changes);
     this.applyFilter();
   }
