@@ -8,12 +8,15 @@ import { createItem, TodoListService } from '../services/todo-list.service';
     <div class="todo-app">
       <app-input-button-unit (submit)="addItem($event)"></app-input-button-unit>
 
+      <app-input-search-filter (search)="findItems($event)"></app-input-search-filter>
+
       <ul>
-        <li *ngFor="let todoItem of todoList; trackBy: trackById">
+        <li *ngFor="let todoItem of filteredTodoList; trackBy: trackById">
           <app-todo-item
             [item]="todoItem"
             (remove)="removeItem(todoItem.id)"
-            (update)="updateItem(todoItem.id, $event.changes)"></app-todo-item>
+            (update)="updateItem(todoItem.id, $event.changes)"
+          ></app-todo-item>
         </li>
       </ul>
     </div>
@@ -22,6 +25,8 @@ import { createItem, TodoListService } from '../services/todo-list.service';
 })
 export class ListManagerComponent implements OnInit {
   todoList: TodoItem[] = [];
+  filteredTodoList: TodoItem[] = [];
+  term: string;
 
   constructor(private todoListService: TodoListService) { }
 
@@ -31,6 +36,7 @@ export class ListManagerComponent implements OnInit {
 
   ngOnInit(): void {
     this.todoList = this.todoListService.getTodoList();
+    this.filteredTodoList = this.todoList;
   }
 
   addItem(title: string): void {
@@ -39,10 +45,21 @@ export class ListManagerComponent implements OnInit {
 
   removeItem(id: number): void {
     this.todoListService.deleteItem(id);
+    this.applyFilter();
   }
 
   updateItem(id, changes): void {
     this.todoListService.updateItem(id, changes);
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    this.filteredTodoList = this.todoList.filter(curItem => curItem.title.toLowerCase().includes(this.term.toLowerCase()));
+  }
+
+  findItems(term: string) {
+    this.term = term;
+    this.applyFilter();
   }
 
 }
