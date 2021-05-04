@@ -12,10 +12,13 @@ import { TodoItem } from '../interfaces/todo-item';
         (click)="completeItem()"
         [checked]="item.completed"
       />
+
       <span
         class="todo-title"
         [ngClass]="{ 'todo-complete': item.completed }"
-      >{{ item.title }}</span>
+      >
+        {{ item.title }}
+      </span>
 
       <button class="btn btn-red" (click)="removeItem()">Remove</button>
     </div>
@@ -25,8 +28,10 @@ import { TodoItem } from '../interfaces/todo-item';
 export class TodoItemComponent implements OnInit {
   @Input()
   item: TodoItem;
+
   @Output()
   remove: EventEmitter<TodoItem> = new EventEmitter<TodoItem>();
+
   @Output()
   update: EventEmitter<ItemWithChanges> = new EventEmitter<ItemWithChanges>();
 
