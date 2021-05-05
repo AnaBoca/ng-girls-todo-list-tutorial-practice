@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
 
 html,
 body,
@@ -63,4 +65,9 @@ ul {
   font-weight: bold;
   text-align: center;
   letter-spacing: -0.8px;
+}
+
+.btn[disabled] {
+  background: lightslategrey !important;
+  cursor: auto;
 }

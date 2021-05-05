@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ItemWithChanges } from '../interfaces/item-with-changes';
+import { Direction } from '../interfaces/move-direction';
 import { TodoItem } from '../interfaces/todo-item';
 import { StorageService } from './storage.service';
 
@@ -58,6 +59,19 @@ export class TodoListService {
       return element.id === id;
     })
     this.todoList.splice(index, 1);
+    this.saveList();
+  }
+
+  moveItem(id: number, direction: Direction) {
+    const indexModifier = direction === 'up' ? -1 : 1;
+
+    const itemToMove = this.todoList.find(curItem => curItem.id === id);
+    const itemCurPosition = this.todoList.indexOf(itemToMove);
+    const nextItem = this.todoList[itemCurPosition + indexModifier];
+
+    this.todoList[itemCurPosition + indexModifier] = itemToMove;
+    this.todoList[itemCurPosition] = nextItem;
+
     this.saveList();
   }
 }

@@ -8,7 +8,7 @@
 
 .todo-checkbox {
   flex-shrink: 0;
-  margin: auto 1ex auto 0;
+  margin: auto 1ex auto 2ex;
 }
 
 .todo-title {
@@ -18,4 +18,16 @@
 
 .todo-complete {
   text-decoration: line-through;
+}
+
+.btn-down {
+  background: blue;
+  margin: 0 2px 0 3px;
+  width: 2rem;
+}
+
+.btn-up {
+  background: purple;
+  margin: 0 2px 0 3px;
+  width: 2rem;
 }

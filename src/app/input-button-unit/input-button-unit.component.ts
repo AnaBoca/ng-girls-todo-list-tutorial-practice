@@ -19,7 +19,7 @@ export class InputButtonUnitComponent implements OnInit {
   listItemValue = '';
 
   @Output()
-  submit: EventEmitter<string> = new EventEmitter<string>();
+  submit = new EventEmitter<string>();
 
   @ViewChild('inputElementRef', { static: true })
   inputNgModel: NgModel;
