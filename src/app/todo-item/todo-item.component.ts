@@ -32,13 +32,23 @@ import { TodoItem } from '../interfaces/todo-item';
       />
 
       <span
+        *ngIf="!isEditing"
         class="todo-title"
         [ngClass]="{ 'todo-complete': item.completed }"
       >
         {{ item.title }}
       </span>
 
+      <input
+        *ngIf="isEditing"
+        [value]="item.title"
+        (keyup)="updateTitle($event)"
+      />
+
+      <button class="{{isEditing ? 'btn': 'btn btn-green'}}" (click)="enableEditingItem()">{{ isEditing ? 'Done': 'Edit'}}</button>
+
       <button class="btn btn-red" (click)="removeItem()">Remove</button>
+
     </div>
   `,
   styleUrls: ['./todo-item.component.scss']
@@ -62,6 +72,8 @@ export class TodoItemComponent implements OnInit {
   @Output()
   move = new EventEmitter<Direction>();
 
+  isEditing: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -69,6 +81,18 @@ export class TodoItemComponent implements OnInit {
 
   removeItem(): void {
     this.remove.emit(this.item);
+  }
+
+  enableEditingItem(): void {
+    this.isEditing = !this.isEditing;
+  }
+
+  updateTitle(event: KeyboardEvent) {
+    const target = event.target as HTMLInputElement;
+    this.update.emit({
+      item: this.item,
+      changes: {title: target.value}
+    })
   }
 
   completeItem(): void {

@@ -21,7 +21,6 @@ import { createItem, TodoListService } from '../services/todo-list.service';
             (move)="moveItem(todoItem.id, $event)"
           >
           </app-todo-item>
-        </li>
       </ul>
     </div>
   `,
