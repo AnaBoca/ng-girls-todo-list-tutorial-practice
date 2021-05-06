@@ -70,6 +70,7 @@ export class ListManagerComponent implements OnInit {
 
   moveItem(id: number, direction: Direction) {
     this.todoListService.moveItem(id, direction);
+    this.applyFilter();
   }
 
 }
