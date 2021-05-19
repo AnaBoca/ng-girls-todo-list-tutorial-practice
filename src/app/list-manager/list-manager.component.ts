@@ -12,7 +12,7 @@ import { createItem, TodoListService } from '../services/todo-list.service';
 
       <app-input-search-filter (search)="findItems($event)"></app-input-search-filter>
 
-      <ul>
+      <ul data-cy="todo-ul">
         <li *ngFor="let todoItem of filteredTodoList; trackBy: trackById; let first = first; let last = last">
           <app-todo-item
             [item]="todoItem"
