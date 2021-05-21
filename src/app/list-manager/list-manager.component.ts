@@ -31,7 +31,7 @@ import { createItem, TodoListService } from '../services/todo-list.service';
 export class ListManagerComponent implements OnInit {
   todoList: TodoItem[] = [];
   filteredTodoList: TodoItem[] = [];
-  term: string;
+  term: string = "";
 
   constructor(private todoListService: TodoListService) { }
 
@@ -64,6 +64,7 @@ export class ListManagerComponent implements OnInit {
   }
 
   findItems(term: string) {
+    console.log(term);
     this.term = term;
     this.applyFilter();
   }

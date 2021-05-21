@@ -43,6 +43,7 @@ import { TodoItem } from '../interfaces/todo-item';
         *ngIf="isEditing"
         [value]="item.title"
         (keyup)="updateTitle($event)"
+        data-cy="editInput"
       />
 
       <button class="{{isEditing ? 'btn': 'btn btn-green'}}" (click)="enableEditingItem()">{{ isEditing ? 'Done': 'Edit'}}</button>
