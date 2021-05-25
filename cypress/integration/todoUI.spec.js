@@ -11,12 +11,16 @@ describe("ToDo UI test suite", () => {
     return cy.get(todoUl).children().first();
   }
 
+  function getLastTodoItem() {
+    return cy.get(todoUl).children().last();
+  }
+
   function getFirstTodoItemTitle() {
     return getFirstTodoItem().find(".todo-title");
   }
 
-  function listShouldHaveLength(length) {
-    cy.get(todoUl).children().should("have.length", length);
+  function getLastTodoItemTitle() {
+    return getLastTodoItem().find(".todo-title");
   }
 
   function firstTodoItemTitleShouldBe(assertText) {
@@ -25,16 +29,22 @@ describe("ToDo UI test suite", () => {
     });
   }
 
+  function lastTodoItemTitleShouldBe(assertText) {
+    getLastTodoItemTitle().should((text) => {
+      expect(text.text().trim()).to.equal(assertText);
+    });
+  }
+
+  function listShouldHaveLength(length) {
+    cy.get(todoUl).children().should("have.length", length);
+  }
+
   it("adds todo item via enter key", () => {
     listShouldHaveLength(6);
 
     cy.get(todoInput).click().type("Entered todo item").type("{enter}");
 
-    cy.get(todoUl + " li span")
-      .last()
-      .should((text) => {
-        expect(text.text().trim()).to.equal("Entered todo item");
-      });
+    lastTodoItemTitleShouldBe("Entered todo item");
 
     listShouldHaveLength(7);
   });
@@ -46,11 +56,7 @@ describe("ToDo UI test suite", () => {
 
     cy.get(saveButton).click();
 
-    cy.get(todoUl + " li span")
-      .last()
-      .should((text) => {
-        expect(text.text().trim()).to.equal("Saved todo item");
-      });
+    lastTodoItemTitleShouldBe("Saved todo item");
 
     listShouldHaveLength(7);
   });
@@ -83,17 +89,64 @@ describe("ToDo UI test suite", () => {
     getFirstTodoItemTitle().should("have.class", "todo-complete");
   });
 
-  it("moves todo item down", () => {});
+  it("moves todo item down", () => {
+    firstTodoItemTitleShouldBe("install NodeJS");
+    getFirstTodoItem().find(".btn-down").click();
+    firstTodoItemTitleShouldBe("install Angular CLI");
+    getFirstTodoItem()
+      .next()
+      .find(".todo-title")
+      .should((text) => {
+        expect(text.text().trim()).to.equal("install NodeJS");
+      });
+  });
 
-  it("moves todo item up", () => {});
+  it("moves todo item up", () => {
+    lastTodoItemTitleShouldBe("deploy app");
+    getLastTodoItem().find(".btn-up").click();
+    lastTodoItemTitleShouldBe("develop app");
+    getLastTodoItem()
+      .prev()
+      .find(".todo-title")
+      .should((text) => {
+        expect(text.text().trim()).to.equal("deploy app");
+      });
+  });
+
+  it("move up button is disabled for first todo item", () => {
+    getFirstTodoItem().find(".btn-up").should("have.attr", "disabled");
+  });
+
+  it("move down button is disabled for last todo item", () => {
+    getLastTodoItem().find(".btn-down").should("have.attr", "disabled");
+  });
+
+  it("validation when clicking save and no todo item has been entered", () => {
+    cy.get(todoInput)
+      .should("have.class", "ng-untouched")
+      .and("have.class", "ng-pristine")
+      .and("have.class", "ng-invalid");
+    cy.get(todoInput).click();
+    cy.get(saveButton).click();
+    cy.get(todoInput)
+      .should("have.class", "ng-invalid")
+      .and("have.class", "ng-touched")
+      .and("have.class", "ng-dirty");
+  });
+
+  it.only("validation when clicking save and previoulsy typing and then deleting todo item input", () => {
+    cy.get(todoInput)
+      .should("have.class", "ng-untouched")
+      .and("have.class", "ng-pristine")
+      .and("have.class", "ng-invalid");
+    cy.get(todoInput).click().type("i'm gonna get deleted").clear();
+    cy.get(todoInput)
+      .should("have.class", "ng-invalid")
+      .and("have.class", "ng-untouched")
+      .and("have.class", "ng-dirty");
+  });
+
+  it("validation when clicking save and previously typing empty space", () => {});
 
   it("searches todo list", () => {});
-
-  it("move up button is disabled for first todo item", () => {});
-
-  it("move down button is disabled for last todo item", () => {});
-
-  it("validation when trying to save blank todo item", () => {});
-
-  it("validation when typing and deleting todo item input and trying to save", () => {});
 });

@@ -17,7 +17,7 @@ import { NgModel } from '@angular/forms';
   styleUrls: ['./input-button-unit.component.scss']
 })
 export class InputButtonUnitComponent implements OnInit {
-  listItemValue = '';
+  listItemValue = "";
 
   @Output()
   submit = new EventEmitter<string>();
