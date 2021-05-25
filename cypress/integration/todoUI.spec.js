@@ -83,5 +83,17 @@ describe("ToDo UI test suite", () => {
     getFirstTodoItemTitle().should("have.class", "todo-complete");
   });
 
-  it("moves todo down", () => {});
+  it("moves todo item down", () => {});
+
+  it("moves todo item up", () => {});
+
+  it("searches todo list", () => {});
+
+  it("move up button is disabled for first todo item", () => {});
+
+  it("move down button is disabled for last todo item", () => {});
+
+  it("validation when trying to save blank todo item", () => {});
+
+  it("validation when typing and deleting todo item input and trying to save", () => {});
 });
