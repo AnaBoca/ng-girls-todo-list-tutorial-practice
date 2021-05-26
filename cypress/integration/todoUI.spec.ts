@@ -37,10 +37,10 @@ describe("ToDo UI test suite", () => {
       .and("have.class", class3);
   }
 
-  function todoInputAttrNgReflectModelShould(conditionStr, valueStr) {
+  function todoInputAttrNgReflectModelShould(condition: string, value?: string) {
     cy.get(todoInput)
       .invoke("attr", "ng-reflect-model")
-      .should(conditionStr, valueStr);
+      .should(condition, value);
   }
 
   it("searches todo list", () => {
