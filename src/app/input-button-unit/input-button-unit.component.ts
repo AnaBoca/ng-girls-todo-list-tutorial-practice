@@ -34,6 +34,10 @@ export class InputButtonUnitComponent implements OnInit {
   submitValue(): void {
     this.inputNgModel.control.markAsDirty();
 
+    if(this.listItemValue.length === 0 || !this.listItemValue.trim()) {
+      this.inputNgModel.control.setErrors({'incorrect': true})
+    }
+
     if (this.inputNgModel.valid) {
       this.submit.emit(this.listItemValue);
       this.inputNgModel.reset();

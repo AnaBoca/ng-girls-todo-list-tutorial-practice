@@ -8,6 +8,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
     <input
       class="search-input"
       (keyup)="findListItem($event)"
+      data-cy="search-input"
     />
   `,
   styleUrls: ['./input-search-filter.component.scss']
