@@ -66,6 +66,9 @@ export class TodoListService {
     const indexModifier = direction === 'up' ? -1 : 1;
 
     const itemToMove = this.todoList.find(curItem => curItem.id === id);
+    if (!itemToMove) {
+      return;
+    }
     const itemCurPosition = this.todoList.indexOf(itemToMove);
     const nextItem = this.todoList[itemCurPosition + indexModifier];
 

@@ -1,36 +1,34 @@
+import {HomePagePo} from "../support/home-page.po"
+
 describe("ToDo UI test suite", () => {
+  const homePage = new HomePagePo();
+
   beforeEach("visit baseUrl", () => {
-    cy.visit("/");
+    homePage.navigateTo();
+    homePage.isElementVisible("app-root", "h1");
+    homePage.isElemTextContain("app-root", "h1", "To-Do")
   });
 
-  const todoInput = "[data-cy='todo-input']";
-  const searchInput = '[data-cy="search-input"]';
-  const saveButton = "[data-cy='save-button']";
-  const todoUl = "[data-cy='todo-ul']";
+  const todoInput = homePage.todoInput;
+  const searchInput = homePage.searchInput;
+  const saveButton = homePage.saveButton;
+  const todoUl = homePage.todoUl;
 
-  function getFirstOrLastTodoItem(firstOrLast) {
-    if (firstOrLast === "first") {
-      return cy.get(todoUl).children().first();
-    } else if (firstOrLast === "last") {
-      return cy.get(todoUl).children().last();
-    }
+  function getFirstOrLastTodoItemTitle(firstOrLast: "first" | "last") {
+    return homePage.getFirstOrLastTodoItem(firstOrLast).find(".todo-title");
   }
 
-  function getFirstOrLastTodoItemTitle(firstOrLast) {
-    return getFirstOrLastTodoItem(firstOrLast).find(".todo-title");
-  }
-
-  function firstOrLastTodoItemTitleShouldBe(firstOrLast, assertText) {
+  function firstOrLastTodoItemTitleShouldBe(firstOrLast: "first" | "last", assertText: string) {
     getFirstOrLastTodoItemTitle(firstOrLast).should((text) => {
       expect(text.text().trim()).to.equal(assertText);
     });
   }
 
-  function listShouldHaveLength(length) {
+  function listShouldHaveLength(length: number) {
     cy.get(todoUl).children().should("have.length", length);
   }
 
-  function todoInputShouldHaveClasses(class1, class2, class3) {
+  function todoInputShouldHaveClasses(class1: string, class2: string, class3: string) {
     cy.get(todoInput)
       .should("have.class", class1)
       .and("have.class", class2)
@@ -49,7 +47,7 @@ describe("ToDo UI test suite", () => {
     cy.get(searchInput).type("de");
 
     firstOrLastTodoItemTitleShouldBe("first", "install NodeJS");
-    getFirstOrLastTodoItem("first")
+    homePage.getFirstOrLastTodoItem("first")
       .next()
       .find(".todo-title")
       .should((text) => {
@@ -85,7 +83,7 @@ describe("ToDo UI test suite", () => {
     firstOrLastTodoItemTitleShouldBe("first", "install NodeJS");
     listShouldHaveLength(6);
 
-    getFirstOrLastTodoItem("first").find(".btn-red").click();
+    homePage.getFirstOrLastTodoItem("first").find(".btn-red").click();
 
     firstOrLastTodoItemTitleShouldBe("first", "install Angular CLI");
     listShouldHaveLength(5);
@@ -94,9 +92,9 @@ describe("ToDo UI test suite", () => {
   it("edits todo item", () => {
     firstOrLastTodoItemTitleShouldBe("first", "install NodeJS");
 
-    getFirstOrLastTodoItem("first").find(".btn-green").click();
+    homePage.getFirstOrLastTodoItem("first").find(".btn-green").click();
     cy.get('[data-cy="editInput"]').type("test");
-    getFirstOrLastTodoItem("first").contains("Done").click();
+    homePage.getFirstOrLastTodoItem("first").contains("Done").click();
 
     firstOrLastTodoItemTitleShouldBe("first", "install NodeJStest");
   });
@@ -107,7 +105,7 @@ describe("ToDo UI test suite", () => {
       "todo-complete"
     );
 
-    getFirstOrLastTodoItem("first").find('[type="checkbox"]').click();
+    homePage.getFirstOrLastTodoItem("first").find('[type="checkbox"]').click();
 
     getFirstOrLastTodoItemTitle("first").should("have.class", "todo-complete");
   });
@@ -115,11 +113,11 @@ describe("ToDo UI test suite", () => {
   it("moves todo item down", () => {
     firstOrLastTodoItemTitleShouldBe("first", "install NodeJS");
 
-    getFirstOrLastTodoItem("first").find(".btn-down").click();
+    homePage.getFirstOrLastTodoItem("first").find(".btn-down").click();
 
     firstOrLastTodoItemTitleShouldBe("first", "install Angular CLI");
 
-    getFirstOrLastTodoItem("first")
+    homePage.getFirstOrLastTodoItem("first")
       .next()
       .find(".todo-title")
       .should((text) => {
@@ -130,11 +128,11 @@ describe("ToDo UI test suite", () => {
   it("moves todo item up", () => {
     firstOrLastTodoItemTitleShouldBe("last", "deploy app");
 
-    getFirstOrLastTodoItem("last").find(".btn-up").click();
+    homePage.getFirstOrLastTodoItem("last").find(".btn-up").click();
 
     firstOrLastTodoItemTitleShouldBe("last", "develop app");
 
-    getFirstOrLastTodoItem("last")
+    homePage.getFirstOrLastTodoItem("last")
       .prev()
       .find(".todo-title")
       .should((text) => {
@@ -143,13 +141,13 @@ describe("ToDo UI test suite", () => {
   });
 
   it("first todo item move up button is disabled", () => {
-    getFirstOrLastTodoItem("first")
+    homePage.getFirstOrLastTodoItem("first")
       .find(".btn-up")
       .should("have.attr", "disabled");
   });
 
   it("last todo item move down button is disabled", () => {
-    getFirstOrLastTodoItem("last")
+    homePage.getFirstOrLastTodoItem("last")
       .find(".btn-down")
       .should("have.attr", "disabled");
   });

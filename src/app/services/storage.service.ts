@@ -7,11 +7,14 @@ export class StorageService {
 
   constructor() { }
 
-  getData(key: string): any {
-    return JSON.parse(localStorage.getItem(key));
+  getData<T>(key: string) {
+    const localStorageValue = localStorage.getItem(key);
+    if (localStorageValue) {
+      return JSON.parse(localStorageValue) as T;
+    }
   }
 
-  setData(key: string, data: any): void {
+  setData<T>(key: string, data: T): void {
     localStorage.setItem(key, JSON.stringify(data));
   }
 }

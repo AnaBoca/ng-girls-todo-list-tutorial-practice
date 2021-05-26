@@ -1,6 +1,10 @@
 {
+  "integrationFolder": "cypress/integration",
+  "supportFile": "cypress/support/index.ts",
+  "videosFolder": "cypress/videos",
+  "screenshotsFolder": "cypress/screenshots",
+  "pluginsFile": "cypress/plugins/index.js",
+  "fixturesFolder": "cypress/fixtures",
   "baseUrl": "http://localhost:4200",
-  "ignoreTestFiles": "**/examples/*",
-  "viewportHeight": 1080,
-  "viewportWidth": 1920
+  "ignoreTestFiles": "**/examples/*"
 }
