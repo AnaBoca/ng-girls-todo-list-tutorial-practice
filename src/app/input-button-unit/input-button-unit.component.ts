@@ -40,7 +40,7 @@ export class InputButtonUnitComponent implements OnInit {
 
     if (this.inputNgModel.valid) {
       this.submit.emit(this.listItemValue);
-      this.inputNgModel.reset();
+      this.inputNgModel.reset("");
     }
   }
 }

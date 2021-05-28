@@ -12,4 +12,9 @@ export abstract class BasePage {
   isElemTextContain(baseSelector: string, itemSel: string, expectedText: string) {
     cy.get(baseSelector).find(itemSel).invoke('text').should('contain', expectedText);
   }
+
+  getPageElement(dataCyValue: string) {
+    return cy.get(`[data-cy='${dataCyValue}']`)
+  }
+
 }

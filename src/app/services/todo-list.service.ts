@@ -21,7 +21,7 @@ const defaultTodoList: TodoItem[] = [
   createItem('create new app'),
   createItem('serve app'),
   createItem('develop app'),
-  createItem('deploy app')
+  createItem('deploy app'),
 ];
 
 @Injectable({

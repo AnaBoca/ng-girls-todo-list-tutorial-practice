@@ -1,97 +1,154 @@
+import { searchInputFixture, getUniqueTitleNameFixture} from "../fixtures/inputFixtures";
 import {HomePagePo} from "../support/home-page.po"
+
 
 describe("ToDo UI test suite", () => {
   let homePage: HomePagePo;
 
+  before("declare instance of home page", () => {
+    homePage = new HomePagePo();
+    homePage.navigateToAndVerifyHomePage();
+    homePage.addTodoListFixture();
+  })
+
   beforeEach("visit baseUrl", () => {
-    homePage = new HomePagePo()
-    homePage.navigateTo();
-    homePage.isElementVisible("app-root", "h1");
-    homePage.isElemTextContain("app-root", "h1", "To-Do")
+
   });
 
   it("searches todo list", () => {
-    homePage.listShouldHaveLength(6);
+    homePage.countItemsMatchingSearchInputFixture(searchInputFixture).then((expectedLength) => {
+      homePage.searchInput.type(searchInputFixture);
 
-    homePage.searchInput.type("de");
+      homePage.listShouldHaveLength(expectedLength);
+      homePage.todoItems.each(li => {
+        cy.wrap(li).should('contain', searchInputFixture);
+      })
 
-    homePage.firstTodoItemTitleShouldBe("install NodeJS");
-    homePage.todoItemAtIndexTitleShouldBe(1, "develop app")
-    homePage.lastTodoItemTitleShouldBe("deploy app");
+      // Data cleanup
+      homePage.searchInput.clear();
+    });
 
-    homePage.listShouldHaveLength(3);
-  });
-
-  it("adds todo item via enter key", () => {
-    homePage.lastTodoItemTitleShouldBe("deploy app");
-    homePage.listShouldHaveLength(6);
-
-    homePage.todoInput.click().type("Entered todo item").type("{enter}");
-
-    homePage.lastTodoItemTitleShouldBe("Entered todo item");
-    homePage.listShouldHaveLength(7);
   });
 
   it("adds todo item via save button", () => {
-    homePage.lastTodoItemTitleShouldBe("deploy app");
-    homePage.listShouldHaveLength(6);
+    homePage.countTotalItems().then(totalItems => {
+      const uniqueTitle = getUniqueTitleNameFixture();
 
-    homePage.todoInput.click().type("Saved todo item");
-    homePage.saveButton.click();
+      homePage.todoInput.click().type(uniqueTitle);
+      homePage.saveButton.click();
 
-    homePage.lastTodoItemTitleShouldBe("Saved todo item");
-    homePage.listShouldHaveLength(7);
+      homePage.lastTodoItemTitleShouldBe(uniqueTitle);
+      homePage.listShouldHaveLength(totalItems + 1);
+
+      // Data cleanup
+      homePage.removeItemsByTitle(uniqueTitle);
+    });
+  });
+
+  it("adds todo item via enter key", () => {
+    homePage.countTotalItems().then(totalItems => {
+      const uniqueTitle = getUniqueTitleNameFixture();
+
+      homePage.todoInput.click().type(uniqueTitle).type("{enter}");
+
+      homePage.lastTodoItemTitleShouldBe(uniqueTitle);
+      homePage.listShouldHaveLength(totalItems + 1);
+
+      // Data cleanup
+      homePage.removeItemsByTitle(uniqueTitle);
+    });
   });
 
   it("removes todo item", () => {
-    homePage.firstTodoItemTitleShouldBe("install NodeJS");
-    homePage.listShouldHaveLength(6);
+    homePage.countTotalItems().then(totalItems => {
+      const uniqueTitle = getUniqueTitleNameFixture();
 
-    homePage.getFirstTodoItem().find(".btn-red").click();
+      homePage.todoInput.click().type(uniqueTitle).type("{enter}");
+      homePage.removeItemsByTitle(uniqueTitle);
 
-    homePage.firstTodoItemTitleShouldBe("install Angular CLI");
-    homePage.listShouldHaveLength(5);
+      homePage.listShouldHaveLength(totalItems);
+      homePage.expectItemToNotExist(uniqueTitle);
+    });
   });
 
   it("edits todo item", () => {
-    homePage.firstTodoItemTitleShouldBe("install NodeJS");
+    homePage.getFirstTodoItem().then(firstTodoItem => {
+      const initialTitle = firstTodoItem.find('.todo-title').text();
+      const uniqueTitle = getUniqueTitleNameFixture();
 
-    homePage.getFirstTodoItem().find(".btn-green").click();
-    homePage.editInput.type("test");
-    homePage.getFirstTodoItem().contains("Done").click();
+      homePage.editTitle(firstTodoItem, uniqueTitle)
 
-    homePage.firstTodoItemTitleShouldBe("install NodeJStest");
+      homePage.firstTodoItemTitleShouldBe(uniqueTitle);
+
+      // Data cleanup
+      homePage.editTitle(firstTodoItem, initialTitle)
+    })
   });
 
   it("checks todo item", () => {
-    homePage.getFirstTodoItemTitle().should(
-      "not.have.class",
-      "todo-complete"
-    );
+    homePage.getFirstUncheckedItem().then(uncheckedItem => {
+      const checkboxEl = uncheckedItem.find('input[type="checkbox"]')[0];
 
-    homePage.getFirstTodoItem().find('[type="checkbox"]').click();
+      cy.wrap(checkboxEl).check();
 
-    homePage.getFirstTodoItemTitle().should("have.class", "todo-complete");
+      const titleEl = uncheckedItem.find('.todo-title')[0];
+
+      cy.wrap(titleEl).should('have.class', 'todo-complete');
+
+      // Data cleanup
+      cy.wrap(checkboxEl).click();
+    })
+
   });
 
   it("moves todo item down", () => {
-    homePage.firstTodoItemTitleShouldBe("install NodeJS");
+    homePage.getTodoItemAtIndex(0).then((initialFirstTodoItemJq) => {
+      const initialFirstTodoItem = initialFirstTodoItemJq[0];
 
-    homePage.getFirstTodoItem().find(".btn-down").click();
+      homePage.getTodoItemAtIndex(1).then((initialSecondTodoItemJq) => {
+        const initialSecondTodoItem = initialSecondTodoItemJq[0];
 
-    homePage.firstTodoItemTitleShouldBe("install Angular CLI");
+        homePage.getTodoItemAtIndex(0).find(".btn-down").click();
 
-    homePage.todoItemAtIndexTitleShouldBe(1, "install NodeJS")
+        homePage.getTodoItemAtIndex(0).then((updatedFirstTodoItemJq) => {
+          const updatedFirstTodoItem = updatedFirstTodoItemJq[0];
+
+          homePage.getTodoItemAtIndex(1).then((updatedSecondTodoItemJq) => {
+            const updatedSecondTodoItem = updatedSecondTodoItemJq[0];
+
+            expect(updatedFirstTodoItem).to.equal(initialSecondTodoItem);
+            expect(updatedSecondTodoItem).to.equal(initialFirstTodoItem);
+          })
+        })
+      })
+      // Data cleanup
+      homePage.getTodoItemAtIndex(0).find('.btn-down').click();
+    })
   });
 
   it("moves todo item up", () => {
-    homePage.lastTodoItemTitleShouldBe("deploy app");
+    homePage.getTodoItemAtIndex(0).then((initialFirstTodoItemJq) => {
+      const initialFirstTodoItem = initialFirstTodoItemJq[0];
 
-    homePage.getLastTodoItem().find(".btn-up").click();
+      homePage.getTodoItemAtIndex(1).then((initialSecondTodoItemJq) => {
+        const initialSecondTodoItem = initialSecondTodoItemJq[0];
 
-    homePage.lastTodoItemTitleShouldBe("develop app");
+        homePage.getTodoItemAtIndex(1).find(".btn-up").click();
 
-    homePage.todoItemAtIndexTitleShouldBe(4, "deploy app")
+        homePage.getTodoItemAtIndex(0).then((updatedFirstTodoItemJq) => {
+          const updatedFirstTodoItem = updatedFirstTodoItemJq[0];
+
+          homePage.getTodoItemAtIndex(1).then((updatedSecondTodoItemJq) => {
+            const updatedSecondTodoItem = updatedSecondTodoItemJq[0];
+
+            expect(updatedFirstTodoItem).to.equal(initialSecondTodoItem);
+            expect(updatedSecondTodoItem).to.equal(initialFirstTodoItem);
+          })
+        })
+      })
+    })
+     // Data cleanup
+     homePage.getTodoItemAtIndex(1).find('.btn-up').click();
   });
 
   it("first todo item move up button is disabled", () => {
@@ -106,50 +163,34 @@ describe("ToDo UI test suite", () => {
       .should("have.attr", "disabled");
   });
 
-  it("validation when clicking save immediately with no todo item entered", () => {
-    homePage.todoInputShouldHaveClasses("ng-untouched", "ng-pristine", "ng-invalid");
-    homePage.todoInputAttrNgReflectModelShould("be.empty");
-
+  it("invalid when clicking save immediately with no todo item entered", () => {
     homePage.saveButton.click();
 
-    homePage.todoInputShouldHaveClasses("ng-untouched", "ng-dirty", "ng-invalid");
-    homePage.todoInputAttrNgReflectModelShould("be.empty");
+    homePage.todoInputShouldHaveClasses("ng-invalid");
   });
 
-  it("validation when clicking save after clicking into todo item input with no todo item entered", () => {
-    homePage.todoInputShouldHaveClasses("ng-untouched", "ng-pristine", "ng-invalid");
-    homePage.todoInputAttrNgReflectModelShould("be.empty");
-
+  it("invalid when clicking save after clicking into todo item input with no todo item entered", () => {
     homePage.todoInput.click();
     homePage.saveButton.click();
 
-    homePage.todoInputShouldHaveClasses("ng-touched", "ng-dirty", "ng-invalid");
-    homePage.todoInputAttrNgReflectModelShould("be.empty");
+    homePage.todoInputShouldHaveClasses("ng-invalid");
   });
 
-  it("validation when clicking save and previously typing and then deleting todo item input", () => {
-    homePage.todoInputShouldHaveClasses("ng-untouched", "ng-pristine", "ng-invalid");
-    homePage.todoInputAttrNgReflectModelShould("be.empty");
+  it("invalid when clicking save and previously typing and then deleting todo item input", () => {
+    const uniqueTitle = getUniqueTitleNameFixture();
 
-    homePage.todoInput.click().type("i'm gonna get deleted");
-    homePage.todoInputAttrNgReflectModelShould("contain", "i'm gonna get deleted");
-    homePage.todoInput.clear();
+    homePage.todoInput.click().type(uniqueTitle).clear();
 
-    homePage.todoInputShouldHaveClasses("ng-untouched", "ng-dirty", "ng-invalid");
-    homePage.todoInputAttrNgReflectModelShould("be.empty");
+    homePage.todoInputShouldHaveClasses("ng-invalid");
   });
 
-  it("validation when clicking save and previously typing empty string as todo item input", () => {
-    homePage.todoInputShouldHaveClasses("ng-untouched", "ng-pristine", "ng-invalid");
-    homePage.todoInputAttrNgReflectModelShould("be.empty");
-
+  it("invalid when clicking save and previously typing empty string as todo item input", () => {
     homePage.todoInput
       .click()
       .type("  1") // .type() does not take an empty input, so this is a hack
       .type("{backspace}");
     homePage.saveButton.click();
 
-    homePage.todoInputShouldHaveClasses("ng-touched", "ng-dirty", "ng-invalid");
-    homePage.todoInputAttrNgReflectModelShould("contain", "  ");
+    homePage.todoInputShouldHaveClasses("ng-invalid");
   });
 });

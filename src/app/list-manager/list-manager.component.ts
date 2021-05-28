@@ -64,7 +64,6 @@ export class ListManagerComponent implements OnInit {
   }
 
   findItems(term: string) {
-    console.log(term);
     this.term = term;
     this.applyFilter();
   }
