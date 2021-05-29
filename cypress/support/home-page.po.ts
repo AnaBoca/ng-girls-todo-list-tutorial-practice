@@ -32,15 +32,10 @@ export class HomePagePo extends BasePage {
 
   get todoItems() {
     return this.todoUl.then(ul => {
+      // Cypress throws an error if there are no children
+      // JQuery returns an empty array to work with if there are no children
       const lis = ul.children();
       return lis;
-    });
-  }
-
-  todoItemAtIndexTitleShouldBe(index: number, assertText: string) {
-    this.getTodoItemAtIndex(index).find(".todo-title")
-    .should((text) => {
-      expect(text.text().trim()).to.equal(assertText);
     });
   }
 
@@ -82,18 +77,8 @@ export class HomePagePo extends BasePage {
     });
   }
 
-  listShouldHaveLength(length: number) {
-    this.todoItems.should("have.length", length);
-  }
-
   getTodoItemAtIndex(index: number) {
     return this.todoItems.eq(index);
-  }
-
-  navigateToAndVerifyHomePage() {
-    this.navigateTo()
-    this.isElementVisible("app-root", "h1");
-    this.isElemTextContain("app-root", "h1", "To-Do")
   }
 
   getItemsByTitle(title: string) {
@@ -104,8 +89,10 @@ export class HomePagePo extends BasePage {
     this.getItemsByTitle(title).find('.btn-red').click();
   }
 
-  expectItemToNotExist(title: string) {
-    this.getItemsByTitle(title).should('not.exist');
+  getFirstUncheckedItem() {
+    return this.todoItems.then(lis => {
+      return lis.find(':not([type="checkbox"]:checked)').first();
+    })
   }
 
   addTodoListFixture() {
@@ -114,6 +101,18 @@ export class HomePagePo extends BasePage {
 
       this.todoInput.click().type(todoItemTitle).type("{enter}");
     }
+  }
+
+  editTitle(listItemEl: JQuery<HTMLElement>, newTitle: string) {
+    cy.wrap(listItemEl).find(".btn-green").click();
+    this.editInput.clear().type(newTitle);
+    this.getFirstTodoItem().contains("Done").click();
+  }
+
+  countTotalItems() {
+    return this.todoItems.then(todoItems => {
+      return todoItems.length;
+    })
   }
 
   countItemsMatchingSearchInputFixture(searchTerm: string) {
@@ -134,22 +133,18 @@ export class HomePagePo extends BasePage {
     })
   }
 
-  countTotalItems() {
-    return this.todoItems.then(todoItems => {
-      return todoItems.length;
-    })
+  listShouldHaveLength(length: number) {
+    this.todoItems.should("have.length", length);
   }
 
-  getFirstUncheckedItem() {
-    return this.todoItems.then(lis => {
-      return lis.find(':not([type="checkbox"]:checked)').first();
-    })
+  expectItemToNotExist(title: string) {
+    this.getItemsByTitle(title).should('not.exist');
   }
 
-  editTitle(listItemEl: JQuery<HTMLElement>, newTitle: string) {
-    cy.wrap(listItemEl).find(".btn-green").click();
-    this.editInput.clear().type(newTitle);
-    this.getFirstTodoItem().contains("Done").click();
+  navigateToAndVerifyHomePage() {
+    this.navigateTo()
+    this.isElementVisible("app-root", "h1");
+    this.isElemTextContain("app-root", "h1", "To-Do")
   }
 
   private getFirstOrLastTodoItem(firstOrLast: "first" | "last") {

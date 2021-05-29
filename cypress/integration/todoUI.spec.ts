@@ -5,14 +5,13 @@ import {HomePagePo} from "../support/home-page.po"
 describe("ToDo UI test suite", () => {
   let homePage: HomePagePo;
 
-  before("declare instance of home page", () => {
+  before("declare instance of home page and add data", () => {
     homePage = new HomePagePo();
     homePage.navigateToAndVerifyHomePage();
     homePage.addTodoListFixture();
   })
 
-  beforeEach("visit baseUrl", () => {
-
+  beforeEach("placeholder", () => {
   });
 
   it("searches todo list", () => {
