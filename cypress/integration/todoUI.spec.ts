@@ -16,6 +16,7 @@ describe("ToDo UI test suite", () => {
 
   after("data cleanup", () => {
     homePage.removeTodoListFixture();
+    homePage.removeItemsToBeDeleted();
   })
 
   it("searches todo list", () => {
@@ -43,8 +44,11 @@ describe("ToDo UI test suite", () => {
       homePage.lastTodoItemTitleShouldBe(uniqueTitle);
       homePage.listShouldHaveLength(totalItems + 1);
 
-      // Data cleanup
-      homePage.removeItemsByTitle(uniqueTitle);
+      // More dynamic data cleanup
+      homePage.itemsToBeDeleted.push(uniqueTitle)
+
+      // Previous individual test data cleanup
+      // homePage.removeItemsByTitle(uniqueTitle);
     });
   });
 
@@ -57,8 +61,11 @@ describe("ToDo UI test suite", () => {
       homePage.lastTodoItemTitleShouldBe(uniqueTitle);
       homePage.listShouldHaveLength(totalItems + 1);
 
-      // Data cleanup
-      homePage.removeItemsByTitle(uniqueTitle);
+      // More dynamic data cleanup
+      homePage.itemsToBeDeleted.push(uniqueTitle);
+
+      // Previous individual test data cleanup
+      // homePage.removeItemsByTitle(uniqueTitle);
     });
   });
 

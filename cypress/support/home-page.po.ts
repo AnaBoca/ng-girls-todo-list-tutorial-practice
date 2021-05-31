@@ -10,6 +10,8 @@ export class HomePagePo extends BasePage {
   private _todoInput = "todo-input";
   private _todoUl = "todo-ul";
 
+  private _itemsToBeDeleted: string[] = [];
+
   get editInput() {
     return this.getPageElement(this._editInput)
   }
@@ -28,6 +30,10 @@ export class HomePagePo extends BasePage {
 
   get todoUl() {
     return this.getPageElement(this._todoUl);
+  }
+
+  get itemsToBeDeleted() {
+    return this._itemsToBeDeleted;
   }
 
   get todoItems() {
@@ -100,6 +106,14 @@ export class HomePagePo extends BasePage {
       const todoItemTitle = todoListFixture[i];
 
       this.todoInput.click().type(todoItemTitle).type("{enter}");
+    }
+  }
+
+  removeItemsToBeDeleted() {
+    for (let i = 0; i < this.itemsToBeDeleted.length; i++) {
+      const item = this.itemsToBeDeleted[i];
+
+      this.removeItemsByTitle(item);
     }
   }
 
