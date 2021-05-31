@@ -14,6 +14,10 @@ describe("ToDo UI test suite", () => {
   beforeEach("placeholder", () => {
   });
 
+  after("data cleanup", () => {
+    homePage.removeTodoListFixture();
+  })
+
   it("searches todo list", () => {
     homePage.countItemsMatchingSearchInputFixture(searchInputFixture).then((expectedLength) => {
       homePage.searchInput.type(searchInputFixture);

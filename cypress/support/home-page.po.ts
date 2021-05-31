@@ -103,6 +103,14 @@ export class HomePagePo extends BasePage {
     }
   }
 
+  removeTodoListFixture() {
+    for (let i = 0; i < todoListFixture.length; i++) {
+      const todoItemTitle = todoListFixture[i];
+
+      this.removeItemsByTitle(todoItemTitle);
+    }
+  }
+
   editTitle(listItemEl: JQuery<HTMLElement>, newTitle: string) {
     cy.wrap(listItemEl).find(".btn-green").click();
     this.editInput.clear().type(newTitle);
