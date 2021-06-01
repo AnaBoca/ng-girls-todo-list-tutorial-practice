@@ -1,5 +1,5 @@
 import { BasePage } from './base.page'
-import {todoListFixture} from "../fixtures/todoListFixture"
+import { todoListFixture } from "../fixtures/todoListFixture"
 
 export class HomePagePo extends BasePage {
   pageUrl = "/"
@@ -61,21 +61,21 @@ export class HomePagePo extends BasePage {
     return this.getFirstOrLastTodoItemTitle("last")
   }
 
-  firstTodoItemTitleShouldBe(assertText: string) {
-    this.firstOrLastTodoItemTitleShouldBe("first", assertText);
+  isFirstTodoItemTitleEqualTo(assertText: string) {
+    this.isFirstOrLastTodoItemTitleEqualTo("first", assertText);
   }
 
-  lastTodoItemTitleShouldBe(assertText: string) {
-    this.firstOrLastTodoItemTitleShouldBe("last", assertText)
+  isLastTodoItemTitleEqualTo(assertText: string) {
+    this.isFirstOrLastTodoItemTitleEqualTo("last", assertText)
   }
 
-  firstTodoItemTitleShouldNotBe(assertText: string) {
-    this.firstOrLastTodoItemTitleShouldNotBe("first", assertText)
-  }
+  // isFirstTodoItemTitleNotEqualTo(assertText: string) {
+  //   this.isFirstOrLastTodoItemTitleNotEqualTo("first", assertText)
+  // }
 
-  lastTodoItemTitleShouldNotBe(assertText: string) {
-    this.firstOrLastTodoItemTitleShouldNotBe("last", assertText)
-  }
+  // isLastTodoItemTitleNotEqualTo(assertText: string) {
+  //   this.isFirstOrLastTodoItemTitleNotEqualTo("last", assertText)
+  // }
 
   todoInputShouldHaveClasses(...cssClasses: string[]) {
     cssClasses.forEach((cssClass) => {
@@ -182,16 +182,16 @@ export class HomePagePo extends BasePage {
     return this.getFirstOrLastTodoItem(firstOrLast).find(".todo-title");
   }
 
-  private firstOrLastTodoItemTitleShouldBe(firstOrLast: "first" | "last", assertText: string) {
+  private isFirstOrLastTodoItemTitleEqualTo(firstOrLast: "first" | "last", assertText: string) {
     this.getFirstOrLastTodoItemTitle(firstOrLast).should((text) => {
       expect(text.text().trim()).to.equal(assertText);
     });
   }
 
-  private firstOrLastTodoItemTitleShouldNotBe(firstOrLast: "first" | "last", assertText: string) {
-    this.getFirstOrLastTodoItemTitle(firstOrLast).should((text) => {
-      expect(text.text().trim()).to.not.equal(assertText);
-    });
-  }
+  // private isFirstOrLastTodoItemTitleNotEqualTo(firstOrLast: "first" | "last", assertText: string) {
+  //   this.getFirstOrLastTodoItemTitle(firstOrLast).should((text) => {
+  //     expect(text.text().trim()).to.not.equal(assertText);
+  //   });
+  // }
 
 }

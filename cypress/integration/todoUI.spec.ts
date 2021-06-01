@@ -1,5 +1,5 @@
-import { searchInputFixture, getUniqueTitleNameFixture} from "../fixtures/inputFixtures";
-import {HomePagePo} from "../support/home-page.po"
+import { searchInputFixture, getUniqueTitleNameFixture } from "../fixtures/inputFixtures";
+import { HomePagePo } from "../support/home-page.po"
 
 
 describe("ToDo UI test suite", () => {
@@ -41,7 +41,7 @@ describe("ToDo UI test suite", () => {
       homePage.todoInput.click().type(uniqueTitle);
       homePage.saveButton.click();
 
-      homePage.lastTodoItemTitleShouldBe(uniqueTitle);
+      homePage.isLastTodoItemTitleEqualTo(uniqueTitle);
       homePage.listShouldHaveLength(totalItems + 1);
 
       // More dynamic data cleanup
@@ -58,7 +58,7 @@ describe("ToDo UI test suite", () => {
 
       homePage.todoInput.click().type(uniqueTitle).type("{enter}");
 
-      homePage.lastTodoItemTitleShouldBe(uniqueTitle);
+      homePage.isLastTodoItemTitleEqualTo(uniqueTitle);
       homePage.listShouldHaveLength(totalItems + 1);
 
       // More dynamic data cleanup
@@ -88,7 +88,7 @@ describe("ToDo UI test suite", () => {
 
       homePage.editTitle(firstTodoItem, uniqueTitle)
 
-      homePage.firstTodoItemTitleShouldBe(uniqueTitle);
+      homePage.isFirstTodoItemTitleEqualTo(uniqueTitle);
 
       // Data cleanup
       homePage.editTitle(firstTodoItem, initialTitle)
