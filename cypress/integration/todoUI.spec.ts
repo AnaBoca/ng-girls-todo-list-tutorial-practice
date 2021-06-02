@@ -7,7 +7,7 @@ describe("ToDo UI test suite", () => {
 
   before("declare instance of home page and add data", () => {
     homePage = new HomePagePo();
-    homePage.navigateToAndVerifyHomePage();
+    homePage.assertNavigateToAndVerifyHomePage();
     homePage.addTodoListFixture();
   })
 
@@ -23,7 +23,7 @@ describe("ToDo UI test suite", () => {
     homePage.countItemsMatchingSearchInputFixture(searchInputFixture).then((expectedLength) => {
       homePage.searchInput.type(searchInputFixture);
 
-      homePage.listShouldHaveLength(expectedLength);
+      homePage.assertListLengthEqualTo(expectedLength);
       homePage.todoItems.each(li => {
         cy.wrap(li).should('contain', searchInputFixture);
       })
@@ -41,8 +41,8 @@ describe("ToDo UI test suite", () => {
       homePage.todoInput.click().type(uniqueTitle);
       homePage.saveButton.click();
 
-      homePage.isLastTodoItemTitleEqualTo(uniqueTitle);
-      homePage.listShouldHaveLength(totalItems + 1);
+      homePage.assertLastTodoItemTitleEqualTo(uniqueTitle);
+      homePage.assertListLengthEqualTo(totalItems + 1);
 
       // More dynamic data cleanup
       homePage.itemsToBeDeleted.push(uniqueTitle)
@@ -58,8 +58,8 @@ describe("ToDo UI test suite", () => {
 
       homePage.todoInput.click().type(uniqueTitle).type("{enter}");
 
-      homePage.isLastTodoItemTitleEqualTo(uniqueTitle);
-      homePage.listShouldHaveLength(totalItems + 1);
+      homePage.assertLastTodoItemTitleEqualTo(uniqueTitle);
+      homePage.assertListLengthEqualTo(totalItems + 1);
 
       // More dynamic data cleanup
       homePage.itemsToBeDeleted.push(uniqueTitle);
@@ -76,8 +76,8 @@ describe("ToDo UI test suite", () => {
       homePage.todoInput.click().type(uniqueTitle).type("{enter}");
       homePage.removeItemsByTitle(uniqueTitle);
 
-      homePage.listShouldHaveLength(totalItems);
-      homePage.expectItemToNotExist(uniqueTitle);
+      homePage.assertListLengthEqualTo(totalItems);
+      homePage.assertItemByTitleDoesNotExist(uniqueTitle);
     });
   });
 
@@ -88,7 +88,7 @@ describe("ToDo UI test suite", () => {
 
       homePage.editTitle(firstTodoItem, uniqueTitle)
 
-      homePage.isFirstTodoItemTitleEqualTo(uniqueTitle);
+      homePage.assertFirstTodoItemTitleEqualTo(uniqueTitle);
 
       // Data cleanup
       homePage.editTitle(firstTodoItem, initialTitle)
@@ -176,14 +176,14 @@ describe("ToDo UI test suite", () => {
   it("invalid when clicking save immediately with no todo item entered", () => {
     homePage.saveButton.click();
 
-    homePage.todoInputShouldHaveClasses("ng-invalid");
+    homePage.assertTodoInputHasClasses("ng-invalid");
   });
 
   it("invalid when clicking save after clicking into todo item input with no todo item entered", () => {
     homePage.todoInput.click();
     homePage.saveButton.click();
 
-    homePage.todoInputShouldHaveClasses("ng-invalid");
+    homePage.assertTodoInputHasClasses("ng-invalid");
   });
 
   it("invalid when clicking save and previously typing and then deleting todo item input", () => {
@@ -191,7 +191,7 @@ describe("ToDo UI test suite", () => {
 
     homePage.todoInput.click().type(uniqueTitle).clear();
 
-    homePage.todoInputShouldHaveClasses("ng-invalid");
+    homePage.assertTodoInputHasClasses("ng-invalid");
   });
 
   it("invalid when clicking save and previously typing empty string as todo item input", () => {
@@ -201,6 +201,6 @@ describe("ToDo UI test suite", () => {
       .type("{backspace}");
     homePage.saveButton.click();
 
-    homePage.todoInputShouldHaveClasses("ng-invalid");
+    homePage.assertTodoInputHasClasses("ng-invalid");
   });
 });

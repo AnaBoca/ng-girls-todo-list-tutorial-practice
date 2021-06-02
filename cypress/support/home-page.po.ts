@@ -61,28 +61,6 @@ export class HomePagePo extends BasePage {
     return this.getFirstOrLastTodoItemTitle("last")
   }
 
-  isFirstTodoItemTitleEqualTo(assertText: string) {
-    this.isFirstOrLastTodoItemTitleEqualTo("first", assertText);
-  }
-
-  isLastTodoItemTitleEqualTo(assertText: string) {
-    this.isFirstOrLastTodoItemTitleEqualTo("last", assertText)
-  }
-
-  // isFirstTodoItemTitleNotEqualTo(assertText: string) {
-  //   this.isFirstOrLastTodoItemTitleNotEqualTo("first", assertText)
-  // }
-
-  // isLastTodoItemTitleNotEqualTo(assertText: string) {
-  //   this.isFirstOrLastTodoItemTitleNotEqualTo("last", assertText)
-  // }
-
-  todoInputShouldHaveClasses(...cssClasses: string[]) {
-    cssClasses.forEach((cssClass) => {
-      this.todoInput.should("have.class", cssClass);
-    });
-  }
-
   getTodoItemAtIndex(index: number) {
     return this.todoItems.eq(index);
   }
@@ -91,44 +69,10 @@ export class HomePagePo extends BasePage {
     return this.todoItems.find(`:contains("${title}")`);
   }
 
-  removeItemsByTitle(title: string) {
-    this.getItemsByTitle(title).find('.btn-red').click();
-  }
-
   getFirstUncheckedItem() {
     return this.todoItems.then(lis => {
       return lis.find(':not([type="checkbox"]:checked)').first();
     })
-  }
-
-  addTodoListFixture() {
-    for (let i = 0; i < todoListFixture.length; i++) {
-      const todoItemTitle = todoListFixture[i];
-
-      this.todoInput.click().type(todoItemTitle).type("{enter}");
-    }
-  }
-
-  removeItemsToBeDeleted() {
-    for (let i = 0; i < this.itemsToBeDeleted.length; i++) {
-      const item = this.itemsToBeDeleted[i];
-
-      this.removeItemsByTitle(item);
-    }
-  }
-
-  removeTodoListFixture() {
-    for (let i = 0; i < todoListFixture.length; i++) {
-      const todoItemTitle = todoListFixture[i];
-
-      this.removeItemsByTitle(todoItemTitle);
-    }
-  }
-
-  editTitle(listItemEl: JQuery<HTMLElement>, newTitle: string) {
-    cy.wrap(listItemEl).find(".btn-green").click();
-    this.editInput.clear().type(newTitle);
-    this.getFirstTodoItem().contains("Done").click();
   }
 
   countTotalItems() {
@@ -155,18 +99,66 @@ export class HomePagePo extends BasePage {
     })
   }
 
-  listShouldHaveLength(length: number) {
-    this.todoItems.should("have.length", length);
+  addTodoListFixture() {
+    for (let i = 0; i < todoListFixture.length; i++) {
+      const todoItemTitle = todoListFixture[i];
+
+      this.todoInput.click().type(todoItemTitle).type("{enter}");
+    }
   }
 
-  expectItemToNotExist(title: string) {
-    this.getItemsByTitle(title).should('not.exist');
+  editTitle(listItemEl: JQuery<HTMLElement>, newTitle: string) {
+    cy.wrap(listItemEl).find(".btn-green").click();
+    this.editInput.clear().type(newTitle);
+    this.getFirstTodoItem().contains("Done").click();
   }
 
-  navigateToAndVerifyHomePage() {
+  removeItemsByTitle(title: string) {
+    this.getItemsByTitle(title).find('.btn-red').click();
+  }
+
+  removeItemsToBeDeleted() {
+    for (let i = 0; i < this.itemsToBeDeleted.length; i++) {
+      const item = this.itemsToBeDeleted[i];
+
+      this.removeItemsByTitle(item);
+    }
+  }
+
+  removeTodoListFixture() {
+    for (let i = 0; i < todoListFixture.length; i++) {
+      const todoItemTitle = todoListFixture[i];
+
+      this.removeItemsByTitle(todoItemTitle);
+    }
+  }
+
+  assertNavigateToAndVerifyHomePage() {
     this.navigateTo()
     this.isElementVisible("app-root", "h1");
     this.isElemTextContain("app-root", "h1", "To-Do")
+  }
+
+  assertFirstTodoItemTitleEqualTo(assertText: string) {
+    this.assertFirstOrLastTodoItemTitleEqualTo("first", assertText);
+  }
+
+  assertLastTodoItemTitleEqualTo(assertText: string) {
+    this.assertFirstOrLastTodoItemTitleEqualTo("last", assertText)
+  }
+
+  assertItemByTitleDoesNotExist(title: string) {
+    this.getItemsByTitle(title).should('not.exist');
+  }
+
+  assertListLengthEqualTo(length: number) {
+    this.todoItems.should("have.length", length);
+  }
+
+  assertTodoInputHasClasses(...cssClasses: string[]) {
+    cssClasses.forEach((cssClass) => {
+      this.todoInput.should("have.class", cssClass);
+    });
   }
 
   private getFirstOrLastTodoItem(firstOrLast: "first" | "last") {
@@ -182,16 +174,10 @@ export class HomePagePo extends BasePage {
     return this.getFirstOrLastTodoItem(firstOrLast).find(".todo-title");
   }
 
-  private isFirstOrLastTodoItemTitleEqualTo(firstOrLast: "first" | "last", assertText: string) {
+  private assertFirstOrLastTodoItemTitleEqualTo(firstOrLast: "first" | "last", assertText: string) {
     this.getFirstOrLastTodoItemTitle(firstOrLast).should((text) => {
       expect(text.text().trim()).to.equal(assertText);
     });
   }
-
-  // private isFirstOrLastTodoItemTitleNotEqualTo(firstOrLast: "first" | "last", assertText: string) {
-  //   this.getFirstOrLastTodoItemTitle(firstOrLast).should((text) => {
-  //     expect(text.text().trim()).to.not.equal(assertText);
-  //   });
-  // }
 
 }
