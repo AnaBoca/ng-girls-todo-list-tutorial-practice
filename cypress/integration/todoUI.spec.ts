@@ -11,9 +11,6 @@ describe("ToDo UI test suite", () => {
     homePage.addTodoListFixture();
   })
 
-  beforeEach("placeholder", () => {
-  });
-
   after("data cleanup", () => {
     homePage.removeTodoListFixture();
     homePage.removeItemsToBeDeleted();
@@ -44,11 +41,8 @@ describe("ToDo UI test suite", () => {
       homePage.assertLastTodoItemTitleEqualTo(uniqueTitle);
       homePage.assertListLengthEqualTo(totalItems + 1);
 
-      // More dynamic data cleanup
+      // Dynamic data cleanup
       homePage.itemsToBeDeleted.push(uniqueTitle)
-
-      // Previous individual test data cleanup
-      // homePage.removeItemsByTitle(uniqueTitle);
     });
   });
 
@@ -61,11 +55,8 @@ describe("ToDo UI test suite", () => {
       homePage.assertLastTodoItemTitleEqualTo(uniqueTitle);
       homePage.assertListLengthEqualTo(totalItems + 1);
 
-      // More dynamic data cleanup
+      // Dynamic data cleanup
       homePage.itemsToBeDeleted.push(uniqueTitle);
-
-      // Previous individual test data cleanup
-      // homePage.removeItemsByTitle(uniqueTitle);
     });
   });
 

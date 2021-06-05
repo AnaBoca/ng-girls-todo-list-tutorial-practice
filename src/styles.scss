@@ -80,3 +80,7 @@ ul {
   background: lightslategrey !important;
   cursor: auto;
 }
+
+input.ng-dirty.ng-invalid {
+  outline: red auto 1px !important;
+}

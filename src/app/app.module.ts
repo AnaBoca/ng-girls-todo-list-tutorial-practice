@@ -6,7 +6,7 @@ import { InputButtonUnitComponent } from './input-button-unit/input-button-unit.
 import { TodoItemComponent } from './todo-item/todo-item.component';
 import { ListManagerComponent } from './list-manager/list-manager.component';
 import { TodoListService } from './services/todo-list.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputSearchFilterComponent } from './input-search-filter/input-search-filter.component';
 
 @NgModule({
@@ -19,7 +19,8 @@ import { InputSearchFilterComponent } from './input-search-filter/input-search-f
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [TodoListService],
   bootstrap: [AppComponent]
