@@ -161,6 +161,12 @@ export class HomePagePo extends BasePage {
     });
   }
 
+  assertEditInputHasClasses(...cssClasses: string[]) {
+    cssClasses.forEach((cssClass) => {
+      this.editInput.should("have.class", cssClass);
+    });
+  }
+
   private getFirstOrLastTodoItem(firstOrLast: "first" | "last") {
     const foundItem = firstOrLast === "first" ? this.todoItems.first() : this.todoItems.last();
     if (foundItem) {

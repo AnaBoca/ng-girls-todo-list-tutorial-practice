@@ -1,3 +1,4 @@
+import { first } from "cypress/types/lodash";
 import { searchInputFixture, getUniqueTitleNameFixture } from "../fixtures/inputFixtures";
 import { HomePagePo } from "../support/home-page.po"
 
@@ -164,20 +165,36 @@ describe("ToDo UI test suite", () => {
       .should("have.attr", "disabled");
   });
 
-  it("invalid when clicking save immediately with no todo item entered", () => {
+  it("done button disabled when edit input is invalid", () => {
+    homePage.getFirstTodoItem().then(firstTodoItem => {
+      const intialTitle = firstTodoItem.find('.todo-title').text();
+
+      cy.wrap(firstTodoItem).find('.btn-green').click();
+      homePage.editInput.clear();
+      console.log(homePage.editInput);
+
+      cy.wrap(firstTodoItem).contains('Done').should("have.attr", "disabled");
+
+      // Data cleanup
+      homePage.editInput.type(intialTitle);
+      cy.wrap(firstTodoItem).contains('Done').click();
+    })
+  })
+
+  it("todo input invalid when clicking save immediately with no todo item entered", () => {
     homePage.saveButton.click();
 
     homePage.assertTodoInputHasClasses("ng-invalid");
   });
 
-  it("invalid when clicking save after clicking into todo item input with no todo item entered", () => {
+  it("todo input invalid when clicking save after clicking into todo item input with no todo item entered", () => {
     homePage.todoInput.click();
     homePage.saveButton.click();
 
     homePage.assertTodoInputHasClasses("ng-invalid");
   });
 
-  it("invalid when clicking save and previously typing and then deleting todo item input", () => {
+  it("todo input invalid when clicking save and previously typing and then deleting todo item input", () => {
     const uniqueTitle = getUniqueTitleNameFixture();
 
     homePage.todoInput.click().type(uniqueTitle).clear();
@@ -185,7 +202,7 @@ describe("ToDo UI test suite", () => {
     homePage.assertTodoInputHasClasses("ng-invalid");
   });
 
-  it("invalid when clicking save and previously typing empty string as todo item input", () => {
+  it("todo input invalid when clicking save and previously typing empty string as todo item input", () => {
     homePage.todoInput
       .click()
       .type("  1") // .type() does not take an empty input, so this is a hack
@@ -194,4 +211,38 @@ describe("ToDo UI test suite", () => {
 
     homePage.assertTodoInputHasClasses("ng-invalid");
   });
+
+  it("edit input invalid when clearing todo item input", () => {
+    homePage.getFirstTodoItem().then(firstTodoItem => {
+      const initialTitle = firstTodoItem.find('.todo-title').text();
+
+      cy.wrap(firstTodoItem).find('.btn-green').click();
+      homePage.editInput.clear();
+
+      homePage.assertEditInputHasClasses("ng-invalid");
+
+      // Data cleanup
+      homePage.editInput.type(initialTitle);
+      cy.wrap(firstTodoItem).contains("Done").click();
+    })
+  })
+
+  it("edit input invalid when trying to submit empty string", () => {
+    homePage.getFirstTodoItem().then(firstTodoItem => {
+      const initialTitle = firstTodoItem.find('.todo-title').text();
+
+      cy.wrap(firstTodoItem).find('.btn-green').click();
+      homePage.editInput.clear();
+      homePage.editInput
+      .click()
+      .type("  1") // .type() does not take an empty input, so this is a hack
+      .type("{backspace}");
+
+      homePage.assertEditInputHasClasses("ng-invalid");
+
+      // Data cleanup
+      homePage.editInput.clear().type(initialTitle);
+      cy.wrap(firstTodoItem).contains("Done").click();
+    })
+  })
 });
