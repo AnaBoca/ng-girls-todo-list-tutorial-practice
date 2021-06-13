@@ -1,4 +1,3 @@
-import { first } from "cypress/types/lodash";
 import { searchInputFixture, getUniqueTitleNameFixture } from "../fixtures/inputFixtures";
 import { HomePagePo } from "../support/home-page.po"
 
