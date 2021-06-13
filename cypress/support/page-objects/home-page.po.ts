@@ -1,5 +1,5 @@
 import { BasePage } from './base.page'
-import { todoListFixture } from "../fixtures/todoListFixture"
+import { todoListFixture } from "../../fixtures/todoListFixture"
 
 export class HomePagePo extends BasePage {
   pageUrl = "/"

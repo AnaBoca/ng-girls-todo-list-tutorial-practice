@@ -1,5 +1,5 @@
 import { searchInputFixture, getUniqueTitleNameFixture } from "../fixtures/inputFixtures";
-import { HomePagePo } from "../support/home-page.po"
+import { HomePagePo } from "../support/page-objects/home-page.po"
 
 
 describe("ToDo UI test suite", () => {
