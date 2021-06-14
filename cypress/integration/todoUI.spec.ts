@@ -170,7 +170,6 @@ describe("ToDo UI test suite", () => {
 
       cy.wrap(firstTodoItem).find('.btn-green').click();
       homePage.editInput.clear();
-      console.log(homePage.editInput);
 
       cy.wrap(firstTodoItem).contains('Done').should("have.attr", "disabled");
 
