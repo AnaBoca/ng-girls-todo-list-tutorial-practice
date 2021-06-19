@@ -1,5 +1,5 @@
-import { BasePage } from './base.page'
-import { todoListFixture } from "../../fixtures/todoListFixture"
+import { BasePage } from './base.po'
+import { todoListFixture } from "../../fixtures/todo_list.fixture"
 
 export class HomePagePo extends BasePage {
   pageUrl = "/"
@@ -32,10 +32,6 @@ export class HomePagePo extends BasePage {
     return this.getPageElement(this._todoUl);
   }
 
-  get itemsToBeDeleted() {
-    return this._itemsToBeDeleted;
-  }
-
   get todoItems() {
     return this.todoUl.then(ul => {
       // Cypress throws an error if there are no children
@@ -43,6 +39,10 @@ export class HomePagePo extends BasePage {
       const lis = ul.children();
       return lis;
     });
+  }
+
+  get itemsToBeDeleted() {
+    return this._itemsToBeDeleted;
   }
 
   getFirstTodoItem() {
@@ -120,8 +120,8 @@ export class HomePagePo extends BasePage {
   removeItemsToBeDeleted() {
     for (let i = 0; i < this.itemsToBeDeleted.length; i++) {
       const item = this.itemsToBeDeleted[i];
-
-      this.removeItemsByTitle(item);
+        this.itemsToBeDeleted.pop();
+        this.removeItemsByTitle(item);
     }
   }
 

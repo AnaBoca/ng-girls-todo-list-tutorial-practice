@@ -1,4 +1,4 @@
-import { getUniqueTitleNameFixture } from "./inputFixtures";
+import { getUniqueTitleNameFixture } from "./input.fixture";
 
 export const todoListFixture = [
   getUniqueTitleNameFixture(),

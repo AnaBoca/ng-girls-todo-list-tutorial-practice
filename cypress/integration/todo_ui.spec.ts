@@ -1,19 +1,25 @@
-import { searchInputFixture, getUniqueTitleNameFixture } from "../fixtures/inputFixtures";
-import { HomePagePo } from "../support/page-objects/home-page.po"
+import { searchInputFixture, getUniqueTitleNameFixture } from "../fixtures/input.fixture";
+import { HomePagePo } from "../support/page-objects/home.po"
 
 
-describe("ToDo UI test suite", () => {
+describe("todo ui test suite", () => {
   let homePage: HomePagePo;
 
   before("declare instance of home page and add data", () => {
     homePage = new HomePagePo();
     homePage.assertNavigateToAndVerifyHomePage();
+    /*
+    The todo list fixture is never utilized in this test suite.
+    However, this is a placeholder as an example of how to import
+    a larger data set to work with later on in the tests.
+    */
     homePage.addTodoListFixture();
+    homePage.removeTodoListFixture();
   })
 
-  after("data cleanup", () => {
-    homePage.removeTodoListFixture();
-    homePage.removeItemsToBeDeleted();
+  // https://docs.cypress.io/guides/references/best-practices#Dangling-state-is-your-friend
+  beforeEach("state reset the recommended way", () => {
+      homePage.removeItemsToBeDeleted();
   })
 
   it("searches todo list", () => {
@@ -41,8 +47,8 @@ describe("ToDo UI test suite", () => {
       homePage.assertLastTodoItemTitleEqualTo(uniqueTitle);
       homePage.assertListLengthEqualTo(totalItems + 1);
 
-      // Dynamic data cleanup
-      homePage.itemsToBeDeleted.push(uniqueTitle)
+      // Dynamic data cleanup pushed to reset state in beforeEach() hook
+      homePage.itemsToBeDeleted.push(uniqueTitle);
     });
   });
 
@@ -55,7 +61,7 @@ describe("ToDo UI test suite", () => {
       homePage.assertLastTodoItemTitleEqualTo(uniqueTitle);
       homePage.assertListLengthEqualTo(totalItems + 1);
 
-      // Dynamic data cleanup
+      // Dynamic data cleanup pushed to reset state in beforeEach() hook
       homePage.itemsToBeDeleted.push(uniqueTitle);
     });
   });
@@ -82,7 +88,7 @@ describe("ToDo UI test suite", () => {
       homePage.assertFirstTodoItemTitleEqualTo(uniqueTitle);
 
       // Data cleanup
-      homePage.editTitle(firstTodoItem, initialTitle)
+      homePage.editTitle(firstTodoItem, initialTitle);
     })
   });
 
@@ -102,7 +108,7 @@ describe("ToDo UI test suite", () => {
 
   });
 
-  it("moves todo item down", () => {
+  it("moves todo item down and up", () => {
     homePage.getTodoItemAtIndex(0).then((initialFirstTodoItemJq) => {
       const initialFirstTodoItem = initialFirstTodoItemJq[0];
 
@@ -122,12 +128,8 @@ describe("ToDo UI test suite", () => {
           })
         })
       })
-      // Data cleanup
-      homePage.getTodoItemAtIndex(0).find('.btn-down').click();
     })
-  });
 
-  it("moves todo item up", () => {
     homePage.getTodoItemAtIndex(0).then((initialFirstTodoItemJq) => {
       const initialFirstTodoItem = initialFirstTodoItemJq[0];
 
@@ -148,18 +150,14 @@ describe("ToDo UI test suite", () => {
         })
       })
     })
-     // Data cleanup
-     homePage.getTodoItemAtIndex(1).find('.btn-up').click();
   });
 
-  it("first todo item move up button is disabled", () => {
+  it("first todo item move up button is disabled and last todo item move down button is disabled", () => {
     homePage.getFirstTodoItem()
       .find(".btn-up")
       .should("have.attr", "disabled");
-  });
 
-  it("last todo item move down button is disabled", () => {
-    homePage.getLastTodoItem()
+      homePage.getLastTodoItem()
       .find(".btn-down")
       .should("have.attr", "disabled");
   });
