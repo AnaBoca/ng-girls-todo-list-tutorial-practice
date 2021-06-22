@@ -1,5 +1,5 @@
-export const searchInputFixture = 'app2';
+export const searchInputFixture = 'de';
 
 export function getUniqueTitleNameFixture() {
-  return new Date().getTime().toString() + Math.floor(Math.random()*1000000);
+  return new Date().getTime().toString() + Math.floor(Math.random() * 1000000);
 }

@@ -2,7 +2,7 @@ import { BasePage } from './base.po'
 import { todoListFixture } from "../../fixtures/todo_list.fixture"
 
 export class HomePagePo extends BasePage {
-  pageUrl = "/"
+  pageUrl = "/";
 
   private _editInput = "editInput";
   private _saveButton = "save-button";
@@ -120,8 +120,8 @@ export class HomePagePo extends BasePage {
   removeItemsToBeDeleted() {
     for (let i = 0; i < this.itemsToBeDeleted.length; i++) {
       const item = this.itemsToBeDeleted[i];
-        this.itemsToBeDeleted.pop();
-        this.removeItemsByTitle(item);
+      this.itemsToBeDeleted.pop();
+      this.removeItemsByTitle(item);
     }
   }
 

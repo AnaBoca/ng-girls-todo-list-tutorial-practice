@@ -19,10 +19,10 @@ describe("todo ui test suite", () => {
 
   // https://docs.cypress.io/guides/references/best-practices#Dangling-state-is-your-friend
   beforeEach("state reset the recommended way", () => {
-      homePage.removeItemsToBeDeleted();
+    homePage.removeItemsToBeDeleted();
   })
 
-  it("searches todo list", () => {
+  it.only("searches todo list", () => {
     homePage.countItemsMatchingSearchInputFixture(searchInputFixture).then((expectedLength) => {
       homePage.searchInput.type(searchInputFixture);
 
@@ -157,7 +157,7 @@ describe("todo ui test suite", () => {
       .find(".btn-up")
       .should("have.attr", "disabled");
 
-      homePage.getLastTodoItem()
+    homePage.getLastTodoItem()
       .find(".btn-down")
       .should("have.attr", "disabled");
   });
@@ -230,9 +230,9 @@ describe("todo ui test suite", () => {
       cy.wrap(firstTodoItem).find('.btn-green').click();
       homePage.editInput.clear();
       homePage.editInput
-      .click()
-      .type("  1") // .type() does not take an empty input, so this is a hack
-      .type("{backspace}");
+        .click()
+        .type("  1") // .type() does not take an empty input, so this is a hack
+        .type("{backspace}");
 
       homePage.assertEditInputHasClasses("ng-invalid");
 
