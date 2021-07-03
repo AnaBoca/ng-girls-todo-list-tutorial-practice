@@ -1,39 +1,41 @@
-import { BasePage } from './base.po'
-import { todoListFixture } from "../../fixtures/todo_list.fixture"
+import { BasePage } from './base.po';
+import { todoListFixture } from '../../fixtures/todo_list.fixture';
 
 export class HomePagePo extends BasePage {
-  pageUrl = "/";
+  pageUrl = '/';
 
-  private _editInput = "editInput";
-  private _saveButton = "save-button";
-  private _searchInput = "search-input";
-  private _todoInput = "todo-input";
-  private _todoUl = "todo-ul";
-
-  private _itemsToBeDeleted: string[] = [];
-
+  private _editInput = 'editInput';
   get editInput() {
-    return this.getPageElement(this._editInput)
+    return this.getPageElement(this._editInput);
   }
 
+  private _saveButton = 'save-button';
   get saveButton() {
     return this.getPageElement(this._saveButton);
   }
 
+  private _searchInput = 'search-input';
   get searchInput() {
     return this.getPageElement(this._searchInput);
   }
 
+  private _todoInput = 'todo-input';
   get todoInput() {
     return this.getPageElement(this._todoInput);
   }
 
+  private _todoUl = 'todo-ul';
   get todoUl() {
     return this.getPageElement(this._todoUl);
   }
 
+  private _itemsToBeDeleted: string[] = [];
+  get itemsToBeDeleted() {
+    return this._itemsToBeDeleted;
+  }
+
   get todoItems() {
-    return this.todoUl.then(ul => {
+    return this.todoUl.then((ul) => {
       // Cypress throws an error if there are no children
       // JQuery returns an empty array to work with if there are no children
       const lis = ul.children();
@@ -41,24 +43,20 @@ export class HomePagePo extends BasePage {
     });
   }
 
-  get itemsToBeDeleted() {
-    return this._itemsToBeDeleted;
-  }
-
   getFirstTodoItem() {
-    return this.getFirstOrLastTodoItem("first");
+    return this.getFirstOrLastTodoItem('first');
   }
 
   getLastTodoItem() {
-    return this.getFirstOrLastTodoItem("last");
+    return this.getFirstOrLastTodoItem('last');
   }
 
   getFirstTodoItemTitle() {
-    return this.getFirstOrLastTodoItemTitle("first")
+    return this.getFirstOrLastTodoItemTitle('first');
   }
 
   getLastTodoItemTitle() {
-    return this.getFirstOrLastTodoItemTitle("last")
+    return this.getFirstOrLastTodoItemTitle('last');
   }
 
   getTodoItemAtIndex(index: number) {
@@ -70,25 +68,26 @@ export class HomePagePo extends BasePage {
   }
 
   getFirstUncheckedItem() {
-    return this.todoItems.then(lis => {
+    return this.todoItems.then((lis) => {
       return lis.find(':not([type="checkbox"]:checked)').first();
-    })
+    });
   }
 
   countTotalItems() {
-    return this.todoItems.then(todoItems => {
+    return this.todoItems.then((todoItems) => {
       return todoItems.length;
-    })
+    });
   }
 
   countItemsMatchingSearchInputFixture(searchTerm: string) {
-    return this.todoItems.then(todoItems => {
-
+    return this.todoItems.then((todoItems) => {
       let numSearchMatches = 0;
 
       for (let i = 0; i < todoItems.length; i++) {
         const li = todoItems[i];
-        const liTitle = li.getElementsByTagName('span')[0].innerHTML.toLowerCase();
+        const liTitle = li
+          .getElementsByTagName('span')[0]
+          .innerHTML.toLowerCase();
 
         if (liTitle.includes(searchTerm)) {
           numSearchMatches += 1;
@@ -96,21 +95,21 @@ export class HomePagePo extends BasePage {
       }
 
       return numSearchMatches;
-    })
+    });
   }
 
   addTodoListFixture() {
     for (let i = 0; i < todoListFixture.length; i++) {
       const todoItemTitle = todoListFixture[i];
 
-      this.todoInput.click().type(todoItemTitle).type("{enter}");
+      this.todoInput.click().type(todoItemTitle).type('{enter}');
     }
   }
 
   editTitle(listItemEl: JQuery<HTMLElement>, newTitle: string) {
-    cy.wrap(listItemEl).find(".btn-green").click();
+    cy.wrap(listItemEl).find('.btn-green').click();
     this.editInput.clear().type(newTitle);
-    this.getFirstTodoItem().contains("Done").click();
+    this.getFirstTodoItem().contains('Done').click();
   }
 
   removeItemsByTitle(title: string) {
@@ -134,56 +133,59 @@ export class HomePagePo extends BasePage {
   }
 
   assertNavigateToAndVerifyHomePage() {
-    this.navigateTo()
-    this.isElementVisible("app-root", "h1");
-    this.isElemTextContain("app-root", "h1", "To-Do")
+    this.navigateTo();
+    this.assertElementIsVisible('app-root', 'h1');
+    this.assertElementContainsText('app-root', 'h1', 'To-Do');
   }
 
   assertFirstTodoItemTitleEqualTo(assertText: string) {
-    this.assertFirstOrLastTodoItemTitleEqualTo("first", assertText);
+    this.assertFirstOrLastTodoItemTitleEqualTo('first', assertText);
   }
 
   assertLastTodoItemTitleEqualTo(assertText: string) {
-    this.assertFirstOrLastTodoItemTitleEqualTo("last", assertText)
+    this.assertFirstOrLastTodoItemTitleEqualTo('last', assertText);
   }
 
-  assertItemByTitleDoesNotExist(title: string) {
+  assertItemWithTitleDoesNotExist(title: string) {
     this.getItemsByTitle(title).should('not.exist');
   }
 
   assertListLengthEqualTo(length: number) {
-    this.todoItems.should("have.length", length);
+    this.todoItems.should('have.length', length);
   }
 
   assertTodoInputHasClasses(...cssClasses: string[]) {
     cssClasses.forEach((cssClass) => {
-      this.todoInput.should("have.class", cssClass);
+      this.todoInput.should('have.class', cssClass);
     });
   }
 
   assertEditInputHasClasses(...cssClasses: string[]) {
     cssClasses.forEach((cssClass) => {
-      this.editInput.should("have.class", cssClass);
+      this.editInput.should('have.class', cssClass);
     });
   }
 
-  private getFirstOrLastTodoItem(firstOrLast: "first" | "last") {
-    const foundItem = firstOrLast === "first" ? this.todoItems.first() : this.todoItems.last();
+  private getFirstOrLastTodoItem(firstOrLast: 'first' | 'last') {
+    const foundItem =
+      firstOrLast === 'first' ? this.todoItems.first() : this.todoItems.last();
     if (foundItem) {
-      return foundItem
+      return foundItem;
     } else {
-      throw new Error(`could not find ${firstOrLast} todo item`)
+      throw new Error(`could not find ${firstOrLast} todo item`);
     }
   }
 
-  private getFirstOrLastTodoItemTitle(firstOrLast: "first" | "last") {
-    return this.getFirstOrLastTodoItem(firstOrLast).find(".todo-title");
+  private getFirstOrLastTodoItemTitle(firstOrLast: 'first' | 'last') {
+    return this.getFirstOrLastTodoItem(firstOrLast).find('.todo-title');
   }
 
-  private assertFirstOrLastTodoItemTitleEqualTo(firstOrLast: "first" | "last", assertText: string) {
+  private assertFirstOrLastTodoItemTitleEqualTo(
+    firstOrLast: 'first' | 'last',
+    assertText: string
+  ) {
     this.getFirstOrLastTodoItemTitle(firstOrLast).should((text) => {
       expect(text.text().trim()).to.equal(assertText);
     });
   }
-
 }

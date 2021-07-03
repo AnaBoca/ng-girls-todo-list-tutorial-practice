@@ -5,16 +5,22 @@ export abstract class BasePage {
     cy.visit(`${this.pageUrl}`);
   }
 
-  isElementVisible(baseSelector: string, itemSel?: string) {
+  assertElementIsVisible(baseSelector: string, itemSel?: string) {
     cy.get(`${baseSelector} ${itemSel}`).should('to.be.visible');
   }
 
-  isElemTextContain(baseSelector: string, itemSel: string, expectedText: string) {
-    cy.get(baseSelector).find(itemSel).invoke('text').should('contain', expectedText);
+  assertElementContainsText(
+    baseSelector: string,
+    itemSel: string,
+    expectedText: string
+  ) {
+    cy.get(baseSelector)
+      .find(itemSel)
+      .invoke('text')
+      .should('contain', expectedText);
   }
 
   getPageElement(dataCyValue: string) {
-    return cy.get(`[data-cy='${dataCyValue}']`)
+    return cy.get(`[data-cy='${dataCyValue}']`);
   }
-
 }
