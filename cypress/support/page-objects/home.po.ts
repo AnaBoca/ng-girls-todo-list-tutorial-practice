@@ -134,8 +134,7 @@ export class HomePagePo extends BasePage {
 
   assertNavigateToAndVerifyHomePage() {
     this.navigateTo();
-    this.assertElementIsVisible('app-root', 'h1');
-    this.assertElementContainsText('app-root', 'h1', 'To-Do');
+    cy.get('h1').should('contain', 'To-Do');
   }
 
   assertFirstTodoItemTitleEqualTo(assertText: string) {

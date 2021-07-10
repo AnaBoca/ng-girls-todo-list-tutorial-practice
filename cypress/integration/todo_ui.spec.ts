@@ -24,7 +24,7 @@ describe('todo ui test suite', () => {
     homePage.removeItemsToBeDeleted();
   });
 
-  it.only('searches todo list', () => {
+  it('searches todo list', () => {
     homePage
       .countItemsMatchingSearchInputFixture(searchInputFixture)
       .then((numMatchesBeforeFilter) => {
@@ -191,14 +191,6 @@ describe('todo ui test suite', () => {
     homePage.assertTodoInputHasClasses('ng-invalid');
   });
 
-  it('todo input invalid when clicking save and previously typing and then deleting todo item input', () => {
-    const uniqueTitle = getUniqueTitleNameFixture();
-
-    homePage.todoInput.click().type(uniqueTitle).clear();
-
-    homePage.assertTodoInputHasClasses('ng-invalid');
-  });
-
   it('todo input invalid when clicking save and previously typing empty string as todo item input', () => {
     homePage.todoInput
       .click()
@@ -241,5 +233,25 @@ describe('todo ui test suite', () => {
       homePage.editInput.clear().type(initialTitle);
       cy.wrap(firstTodoItem).contains('Done').click();
     });
+  });
+
+  it('REFACTORED - todo input invalid when clicking save and previously typing and then deleting todo item input', () => {
+    const uniqueTitle = getUniqueTitleNameFixture();
+
+    homePage.todoInput.click().type(uniqueTitle).clear();
+
+    homePage.assertTodoInputHasClasses('ng-invalid');
+  });
+
+  it('NOT REFACTORED - todo input invalid when clicking save and previously typing and then deleting todo item input', () => {
+    // Data cleanup
+    cy.reload();
+
+    const uniqueTitle =
+      new Date().getTime().toString() + Math.floor(Math.random() * 1000000);
+
+    cy.get('[data-cy="todo-input"]').type(uniqueTitle).clear();
+
+    cy.get('[data-cy="todo-input"]').should('have.class', 'ng-invalid');
   });
 });
