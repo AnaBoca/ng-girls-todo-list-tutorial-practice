@@ -1,5 +1,5 @@
 import { BasePage } from './base.po';
-import { todoListFixture } from '../../fixtures/todo_list.fixture';
+import { todoListFixture } from '../../fixtures/input.fixture';
 
 export class HomePagePo extends BasePage {
   pageUrl = '/';
